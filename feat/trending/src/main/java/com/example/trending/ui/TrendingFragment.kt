@@ -29,6 +29,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.example.core.R
 import com.example.core.data.networking.trending.Movie
+import com.example.core.ui.compose.ZackReferenceTheme
 import com.example.core.ui.widgets.LoadingView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,7 +48,7 @@ class TrendingFragment : Fragment() {
             // is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                MaterialTheme {
+                ZackReferenceTheme {
                     val state by viewModel.viewState.collectAsState(initial = TrendingViewState.Loading)
                     renderTrendingScreen(state)
                 }
@@ -124,7 +125,7 @@ internal fun MovieCard(
 
                     Text(
                         modifier = Modifier.padding(top = 10.dp),
-                        text = "Language : ${movie.original_language.toUpperCase()}",
+                        text = "Language : ${movie.original_language.uppercase()}",
                         color = Color.Gray
                     )
                 }
@@ -139,7 +140,7 @@ internal fun MovieCard(
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
-    MaterialTheme {
+    ZackReferenceTheme {
         Surface(
             modifier = Modifier.padding(20.dp)
         ) {

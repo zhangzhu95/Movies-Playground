@@ -1,4 +1,4 @@
-package com.example.zackreference.ui.theme
+package com.example.core.ui.compose
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
