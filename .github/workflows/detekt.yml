@@ -1,9 +1,9 @@
 name: Detekt Code Analysis
 
-on: [pull_request]
+on: [ pull_request ]
 
 jobs:
-  build:
+  detekt:
 
     runs-on: ubuntu-latest
 
