@@ -1,4 +1,4 @@
-name: PR Automated Checks
+name: Build and Test
 
 on: [pull_request]
 
