@@ -1,7 +1,7 @@
 package com.example.retrofit.data
 
-import android.util.Log
 import com.example.core.data.networking.Response
+import timber.log.Timber
 
 interface RemoteDataSource {
 
@@ -9,7 +9,7 @@ interface RemoteDataSource {
         try {
             val response = call()
             if (response.isSuccessful) {
-                Log.i("request", "Request Response Success : ${response.body().toString()}")
+                Timber.i("Request Response Success : ${response.body().toString()}")
                 val body = response.body()
                 if (body != null)
                     return Response.Success(body)
@@ -22,7 +22,7 @@ interface RemoteDataSource {
     }
 
     private fun <T> error(message: String): Response.Error<T> {
-        Log.e("request", "Request Response Failure ss : $message")
+        Timber.e("Request Response Failure ss : $message")
         return Response.Error(message)
     }
 }
