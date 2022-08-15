@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.compose.ZackReferenceTheme
 
+@Suppress("FunctionNaming")
 @Composable
 fun LoadingView(text: String? = null) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -21,8 +22,6 @@ fun LoadingView(text: String? = null) {
         if (text != null)
             Text(text = text)
     }
-
-
 }
 
 @Preview(showBackground = true)

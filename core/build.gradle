@@ -7,44 +7,7 @@ plugins {
     id "io.gitlab.arturbosch.detekt"
 }
 
-android {
-
-    compileSdk 32
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    defaultConfig {
-        minSdk 21
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-    }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
-
-}
+apply from: "$rootDir/android.gradle"
 
 dependencies {
     api 'androidx.appcompat:appcompat:1.4.2'
@@ -88,6 +51,7 @@ dependencies {
     api "androidx.compose.material3:material3-window-size-class:1.0.0-alpha15"
     debugApi "androidx.customview:customview:1.2.0-alpha01"
     debugApi "androidx.customview:customview-poolingcontainer:1.0.0"
+    api 'com.jakewharton.timber:timber:5.0.1'
 
     // Coil --- Coil --- Coil --- Coil
     api "io.coil-kt:coil-compose:2.0.0-rc01"

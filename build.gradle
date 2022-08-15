@@ -19,3 +19,10 @@ plugins {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
+
+def check = tasks.register("check")
+check.configure {
+    dependsOn = dependsOn.findAll { it.name != 'detekt' }
+}

@@ -1,14 +1,21 @@
 package com.example.zackreference
 
 import android.app.Application
-import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
+import timber.log.Timber.Forest.plant
 
 @HiltAndroidApp
-class ZackApplication : Application(){
+class ZackApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("App" , "Creation")
+        setupTimber()
+    }
+
+    private fun setupTimber() {
+        if (BuildConfig.DEBUG) {
+            plant(Timber.DebugTree())
+        }
     }
 }

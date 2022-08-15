@@ -13,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-
 @InstallIn(SingletonComponent::class)
 @Module
 class RetrofitModule {
@@ -29,9 +28,9 @@ class RetrofitModule {
     ): OkHttpClient =
         OkHttpClient
             .Builder()
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(Config.CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(Config.READ_TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(Config.WRITE_TIMEOUT, TimeUnit.SECONDS)
             .addInterceptor(authInterceptor)
             .build()
 
@@ -61,7 +60,8 @@ class RetrofitModule {
 
     private fun <T> provideService(
         okhttpClient: OkHttpClient,
-        converterFactory: GsonConverterFactory, clazz: Class<T>
+        converterFactory: GsonConverterFactory,
+        clazz: Class<T>
     ): T {
         return createRetrofit(okhttpClient, converterFactory).create(clazz)
     }
