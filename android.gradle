@@ -39,3 +39,8 @@ android {
         }
     }
 }
+
+detekt{
+    // Defaults to the default detekt configuration.
+    ignoreFailures = true
+}

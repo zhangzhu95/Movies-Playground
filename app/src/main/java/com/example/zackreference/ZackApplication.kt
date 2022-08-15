@@ -14,7 +14,6 @@ class ZackApplication : Application() {
     }
 
     private fun setupTimber() {
-        // TODO: Put it into a separate module
         if (BuildConfig.DEBUG) {
             plant(Timber.DebugTree())
         }
