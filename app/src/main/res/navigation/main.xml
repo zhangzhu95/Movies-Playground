@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/trendingFragment"
-        android:name="com.example.trending.ui.TrendingFragment"
+        android:name="com.zhangzhu95.trending.ui.TrendingFragment"
         android:label="TrendingFragment"/>
 </navigation>

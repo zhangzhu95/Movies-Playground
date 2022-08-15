@@ -12,7 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "ZackReference"
+rootProject.name = "Movies Playground"
 include ':app'
 include ':core'
 include ':thirdparty'
