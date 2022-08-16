@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/ZackReference/app/src/main/res/drawable/ic_app.xml" value="0.256" />
         <entry key="..\:/Users/Lenovo/AndroidStudioProjects/ZackReference/app/src/main/res/layout/activity_main.xml" value="0.1947463768115942" />
         <entry key="..\:/Users/Lenovo/AndroidStudioProjects/ZackReference/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.2078125" />
         <entry key="..\:/Users/Lenovo/AndroidStudioProjects/ZackReference/core/src/main/res/drawable/ic_baseline_star_24.xml" value="0.257" />
