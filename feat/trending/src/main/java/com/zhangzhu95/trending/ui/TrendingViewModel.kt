@@ -17,5 +17,4 @@ internal class TrendingViewModel @Inject constructor(
         val result = fetchTrendingViewState()
         emit(result)
     }
-
 }

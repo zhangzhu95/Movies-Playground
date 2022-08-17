@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/trendingFragment"
         android:name="com.zhangzhu95.trending.ui.TrendingFragment"
-        android:label="TrendingFragment"/>
+        android:label="TrendingFragment">
+        <action
+            android:id="@+id/action_trendingFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.zhangzhu95.details.ui.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="movieId"
+            app:argType="string" />
+    </fragment>
 </navigation>

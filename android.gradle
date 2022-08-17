@@ -1,3 +1,5 @@
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+
 android {
 
     compileSdk 32
@@ -40,7 +42,7 @@ android {
     }
 }
 
-detekt{
+detekt {
     // Defaults to the default detekt configuration.
     ignoreFailures = true
 }
