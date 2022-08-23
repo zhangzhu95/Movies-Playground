@@ -12,6 +12,7 @@ dependencies {
     implementation project(path: ':thirdparty:retrofit')
     implementation project(path: ':core')
     implementation project(path: ':feat:trending')
+    implementation project(path: ':feat:details')
 
     // Hilt --- Hilt --- Hilt --- Hilt --- Hilt
     implementation "com.google.dagger:hilt-android:2.42"
