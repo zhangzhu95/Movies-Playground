@@ -1,5 +1,6 @@
 package com.zhangzhu95.moviesplayground.di.navigation
 
+import com.zhangzhu95.details.ui.DetailsNavigation
 import com.zhangzhu95.trending.ui.TrendingNavigation
 import dagger.Module
 import dagger.Provides
@@ -13,4 +14,6 @@ class NavigationModule {
     @Provides
     fun provideTrendingNavigation(): TrendingNavigation = TrendingNavigationImpl
 
+    @Provides
+    fun provideDetailsNavigation(): DetailsNavigation = DetailsNavigationImpl
 }

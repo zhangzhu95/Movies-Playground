@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,27 +14,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,14 +43,18 @@ import com.zhangzhu95.core.helpers.extensions.toDuration
 import com.zhangzhu95.core.helpers.extensions.toPosterURL
 import com.zhangzhu95.core.ui.compose.AppTheme
 import com.zhangzhu95.core.ui.compose.Blackish
+import com.zhangzhu95.core.ui.compose.Chip
 import com.zhangzhu95.core.ui.compose.DarkerWhite
-import com.zhangzhu95.core.ui.compose.LightBlackish
+import com.zhangzhu95.core.ui.compose.FadedImage
 import com.zhangzhu95.core.ui.widgets.LoadingView
-import com.zhangzhu95.core.ui.widgets.RemoteImage
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
+
+    @Inject
+    lateinit var navigation: DetailsNavigation
 
     private val viewModel: DetailsViewModel by viewModels()
 
@@ -73,8 +69,15 @@ class DetailsFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 AppTheme {
-                    val state by viewModel.viewState.collectAsState(initial = DetailsViewState.Loading)
-                    renderDetailsScreen(state)
+                    val state =
+                        viewModel.viewState.collectAsState(initial = DetailsViewState.Loading).value
+                    when (state) {
+                        is DetailsViewState.Loading -> LoadingView()
+                        is DetailsViewState.Success -> movieDetails(state.data) {
+                            navigation.discoverMovie(requireContext(), state.data.homepage)
+                        }
+                        else -> Text(text = "State not handled")
+                    }
                 }
             }
         }
@@ -82,27 +85,7 @@ class DetailsFragment : Fragment() {
 }
 
 @Composable
-fun renderDetailsScreen(state: DetailsViewState) {
-    when (state) {
-        is DetailsViewState.Loading -> LoadingView()
-        is DetailsViewState.Success -> movieDetails(state.data)
-        else -> Text(text = "State not handled")
-    }
-}
-
-@Composable
-fun chip(text: String) {
-    Text(
-        text = text,
-        Modifier
-            .background(LightBlackish, shape = RoundedCornerShape(5.dp))
-            .padding(vertical = 5.dp, horizontal = 10.dp),
-        color = DarkerWhite
-    )
-}
-
-@Composable
-fun movieDetails(details: MovieDetails) {
+fun movieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = Modifier
@@ -113,32 +96,14 @@ fun movieDetails(details: MovieDetails) {
 
             Box(contentAlignment = Alignment.Center) {
                 // Poster
-                RemoteImage(
+                FadedImage(
                     url = details.backdrop_path.toPosterURL(),
-                    imageResource = R.mipmap.movie_poster,
-                    modifier = Modifier
-                        .height(400.dp)
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .drawWithContent {
-                            val colors = listOf(
-                                Color.Transparent,
-                                Blackish
-                            )
-                            drawContent()
-                            drawRect(
-                                brush = Brush.verticalGradient(colors)
-                            )
-                        },
-                    contentScale = ContentScale.Crop
+                    placeholderRes = R.mipmap.movie_poster,
+                    modifier = Modifier.height(400.dp)
                 )
 
                 // Play button
-                TextButton(
-                    onClick = {
-                        // TODO: Open details in browser
-                    }
-                ) {
+                TextButton(onClick = onPlayClicked) {
                     Image(
                         painter = painterResource(id = R.mipmap.play_button),
                         contentDescription = "",
@@ -165,7 +130,7 @@ fun movieDetails(details: MovieDetails) {
                 // Categories
                 LazyRow {
                     items(details.genres) { genre ->
-                        chip(text = genre.name)
+                        Chip(text = genre.name)
                         Spacer(modifier = Modifier.padding(horizontal = 5.dp))
                     }
                 }
@@ -191,16 +156,17 @@ fun movieDetails(details: MovieDetails) {
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
 @Composable
 fun previewMovieDetails() {
+    val text = stringResource(id = R.string.placeholder_title)
     AppTheme {
         movieDetails(
             MovieDetails(
-                title = "SkAvengers",
+                title = text,
                 runtime = 100,
-                genres = listOf(MovieGenres(name = "Action"), MovieGenres(name = "Thriller")),
+                genres = listOf(MovieGenres(name = text), MovieGenres(name = text)),
                 vote_average = 8.5,
-                tagline = "The end is near",
-                overview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit"
+                tagline = text,
+                overview = stringResource(id = R.string.placeholder_description)
             )
-        )
+        ) {}
     }
 }

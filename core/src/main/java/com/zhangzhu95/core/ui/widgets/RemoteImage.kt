@@ -11,13 +11,13 @@ import coil.compose.AsyncImage
 @Composable
 fun RemoteImage(
     url: String,
-    imageResource: Int,
+    placeholderRes: Int,
     modifier: Modifier,
     contentScale: ContentScale? = null
 ) {
     if (LocalInspectionMode.current) {
         Image(
-            painter = painterResource(id = imageResource),
+            painter = painterResource(id = placeholderRes),
             contentDescription = "Image",
             modifier = modifier,
             contentScale = contentScale ?: ContentScale.None

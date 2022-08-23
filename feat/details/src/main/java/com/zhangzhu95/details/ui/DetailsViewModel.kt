@@ -1,11 +1,12 @@
 package com.zhangzhu95.details.ui
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.zhangzhu95.core.ui.StateViewModel
 import com.zhangzhu95.details.domain.FetchDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,9 +17,18 @@ internal class DetailsViewModel @Inject constructor(
 
     private val movieId = savedStateHandle.get<String>("movieId")
 
-    override val viewState: Flow<DetailsViewState> = flow {
-        emit(DetailsViewState.Loading)
-        val result = fetchDetailsUseCase(movieId)
-        emit(result)
+    override val viewState = MutableStateFlow<DetailsViewState>(DetailsViewState.Idle)
+
+    init {
+        loadDetails()
     }
+
+    private fun loadDetails() {
+        viewModelScope.launch {
+            viewState.value = DetailsViewState.Loading
+            val result = fetchDetailsUseCase(movieId)
+            viewState.value = result
+        }
+    }
+
 }
