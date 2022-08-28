@@ -1,6 +1,6 @@
 package com.zhangzhu95.details.ui
 
-import com.zhangzhu95.core.data.networking.details.MovieDetails
+import com.zhangzhu95.data.movies.models.MovieDetails
 import com.zhangzhu95.core.ui.ViewState
 
 sealed class DetailsViewState : ViewState {

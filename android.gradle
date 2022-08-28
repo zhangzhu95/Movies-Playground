@@ -1,4 +1,5 @@
-apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'kotlin-kapt'
+apply plugin: "io.gitlab.arturbosch.detekt"
 
 android {
 

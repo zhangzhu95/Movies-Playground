@@ -37,16 +37,16 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.zhangzhu95.core.R
-import com.zhangzhu95.core.data.networking.details.MovieDetails
-import com.zhangzhu95.core.data.networking.details.MovieGenres
+import com.zhangzhu95.core.helpers.extensions.toBigPosterURL
 import com.zhangzhu95.core.helpers.extensions.toDuration
-import com.zhangzhu95.core.helpers.extensions.toPosterURL
-import com.zhangzhu95.core.ui.compose.AppTheme
-import com.zhangzhu95.core.ui.compose.Blackish
-import com.zhangzhu95.core.ui.compose.Chip
-import com.zhangzhu95.core.ui.compose.DarkerWhite
-import com.zhangzhu95.core.ui.compose.FadedImage
+import com.zhangzhu95.core.ui.widgets.Chip
+import com.zhangzhu95.core.ui.widgets.FadedImage
 import com.zhangzhu95.core.ui.widgets.LoadingView
+import com.zhangzhu95.core.ui.widgets.styles.AppTheme
+import com.zhangzhu95.core.ui.widgets.styles.Blackish
+import com.zhangzhu95.core.ui.widgets.styles.DarkerWhite
+import com.zhangzhu95.data.movies.models.MovieDetails
+import com.zhangzhu95.data.movies.models.MovieGenres
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -97,7 +97,7 @@ fun movieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
             Box(contentAlignment = Alignment.Center) {
                 // Poster
                 FadedImage(
-                    url = details.backdrop_path.toPosterURL(),
+                    url = details.backdropPath.toBigPosterURL(),
                     placeholderRes = R.mipmap.movie_poster,
                     modifier = Modifier.height(400.dp)
                 )
@@ -162,8 +162,11 @@ fun previewMovieDetails() {
             MovieDetails(
                 title = text,
                 runtime = 100,
-                genres = listOf(MovieGenres(name = text), MovieGenres(name = text)),
-                vote_average = 8.5,
+                genres = listOf(
+                    MovieGenres(name = text),
+                    MovieGenres(name = text)
+                ),
+                voteAverage = 8.5,
                 tagline = text,
                 overview = stringResource(id = R.string.placeholder_description)
             )

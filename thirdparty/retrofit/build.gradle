@@ -1,20 +1,15 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id "io.gitlab.arturbosch.detekt"
 }
 
 apply from: "$rootDir/android.gradle"
+apply from: "$rootDir/android-hilt.gradle"
 
 dependencies {
     api project(path: ':thirdparty')
+    api project(path: ':data')
 
     implementation 'com.squareup.retrofit2:retrofit:+'
     implementation 'com.squareup.retrofit2:converter-gson:+'
-
-    // Hilt --- Hilt --- Hilt --- Hilt --- Hilt
-    implementation "com.google.dagger:hilt-android:2.42"
-    kapt "com.google.dagger:hilt-compiler:2.42"
 }

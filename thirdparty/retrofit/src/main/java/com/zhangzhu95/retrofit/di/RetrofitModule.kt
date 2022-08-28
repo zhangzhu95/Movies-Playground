@@ -2,8 +2,7 @@ package com.zhangzhu95.retrofit.di
 
 import com.zhangzhu95.core.config.Config
 import com.zhangzhu95.retrofit.interceptors.AuthInterceptor
-import com.zhangzhu95.retrofit.services.DetailsService
-import com.zhangzhu95.retrofit.services.TrendingService
+import com.zhangzhu95.retrofit.services.MoviesService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,20 +51,11 @@ class RetrofitModule {
 
     @Singleton
     @Provides
-    fun provideTrendingService(
+    fun provideMoviesService(
         okhttpClient: OkHttpClient,
         converterFactory: GsonConverterFactory
-    ): TrendingService {
-        return provideService(okhttpClient, converterFactory, TrendingService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideDetailsService(
-        okhttpClient: OkHttpClient,
-        converterFactory: GsonConverterFactory
-    ): DetailsService {
-        return provideService(okhttpClient, converterFactory, DetailsService::class.java)
+    ): MoviesService {
+        return provideService(okhttpClient, converterFactory, MoviesService::class.java)
     }
 
     private fun <T> provideService(

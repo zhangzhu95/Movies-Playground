@@ -1,20 +1,15 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id "io.gitlab.arturbosch.detekt"
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 apply from: "$rootDir/android.gradle"
+apply from: "$rootDir/android-hilt.gradle"
 
 dependencies {
     implementation project(path: ':thirdparty:retrofit')
     implementation project(path: ':core')
-    implementation project(path: ':feat:trending')
+    implementation project(path: ':feat:home')
     implementation project(path: ':feat:details')
-
-    // Hilt --- Hilt --- Hilt --- Hilt --- Hilt
-    implementation "com.google.dagger:hilt-android:2.42"
-    kapt "com.google.dagger:hilt-compiler:2.42"
 }

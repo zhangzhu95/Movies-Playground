@@ -2,20 +2,20 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    app:startDestination="@id/trendingFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/trendingFragment"
-        android:name="com.zhangzhu95.trending.ui.TrendingFragment"
-        android:label="TrendingFragment">
+        android:id="@+id/homeFragment"
+        android:name="com.zhangzhu95.trending.ui.HomeFragment"
+        android:label="">
         <action
-            android:id="@+id/action_trendingFragment_to_detailsFragment"
+            android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.zhangzhu95.details.ui.DetailsFragment"
-        android:label="DetailsFragment" >
+        android:label="" >
         <argument
             android:name="movieId"
             app:argType="string" />
