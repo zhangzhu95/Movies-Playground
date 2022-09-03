@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -42,6 +41,7 @@ import com.zhangzhu95.core.helpers.extensions.toDuration
 import com.zhangzhu95.core.ui.widgets.Chip
 import com.zhangzhu95.core.ui.widgets.FadedImage
 import com.zhangzhu95.core.ui.widgets.LoadingView
+import com.zhangzhu95.core.ui.widgets.Spacing
 import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 import com.zhangzhu95.core.ui.widgets.styles.Blackish
 import com.zhangzhu95.core.ui.widgets.styles.DarkerWhite
@@ -73,7 +73,7 @@ class DetailsFragment : Fragment() {
                         viewModel.viewState.collectAsState(initial = DetailsViewState.Loading).value
                     when (state) {
                         is DetailsViewState.Loading -> LoadingView()
-                        is DetailsViewState.Success -> movieDetails(state.data) {
+                        is DetailsViewState.Details -> MovieDetails(state.data) {
                             navigation.discoverMovie(requireContext(), state.data.homepage)
                         }
                         else -> Text(text = "State not handled")
@@ -85,7 +85,7 @@ class DetailsFragment : Fragment() {
 }
 
 @Composable
-fun movieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
+fun MovieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = Modifier
@@ -125,25 +125,25 @@ fun movieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
                     textAlign = TextAlign.End,
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.padding(bottom = 16.dp))
+                Spacing.Vertical.Medium()
 
                 // Categories
                 LazyRow {
                     items(details.genres) { genre ->
                         Chip(text = genre.name)
-                        Spacer(modifier = Modifier.padding(horizontal = 5.dp))
+                        Spacing.Vertical.Tiny()
                     }
                 }
-                Spacer(modifier = Modifier.padding(bottom = 24.dp))
+                Spacing.Vertical.Big()
 
                 // Title
                 Text(details.title, fontSize = 24.sp, color = Color.White)
-                Spacer(modifier = Modifier.padding(bottom = 4.dp))
+                Spacing.Vertical.Tiny()
 
                 // Subtitle
                 if (details.tagline.isNotEmpty()) {
                     Text(details.tagline, fontSize = 18.sp, color = DarkerWhite)
-                    Spacer(modifier = Modifier.padding(bottom = 12.dp))
+                    Spacing.Vertical.Small()
                 }
 
                 // Description
@@ -155,10 +155,10 @@ fun movieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
 
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
 @Composable
-fun previewMovieDetails() {
+fun PreviewMovieDetails() {
     val text = stringResource(id = R.string.placeholder_title)
     AppTheme {
-        movieDetails(
+        MovieDetails(
             MovieDetails(
                 title = text,
                 runtime = 100,

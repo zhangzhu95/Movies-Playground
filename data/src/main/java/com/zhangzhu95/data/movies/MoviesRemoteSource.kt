@@ -5,6 +5,7 @@ import com.zhangzhu95.data.movies.models.MoviesListResponse
 import com.zhangzhu95.data.networking.Response
 
 interface MoviesRemoteSource {
+
     suspend fun getTrending(): Response<MoviesListResponse>
 
     suspend fun getTopRated(): Response<MoviesListResponse>

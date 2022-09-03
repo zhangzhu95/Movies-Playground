@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+@SuppressWarnings("MemberNameEqualsClassName")
 class Spacing {
 
     object Vertical : ComposeSpacing {
@@ -26,7 +27,6 @@ class Spacing {
 
         @Composable
         private fun Vertical(value: Int) = Spacer(modifier = Modifier.padding(vertical = value.dp))
-
     }
 
     object Horizontal : ComposeSpacing {
@@ -59,7 +59,6 @@ class Spacing {
         fun Horizontal(value: Int) = Spacer(modifier = Modifier.padding(vertical = value.dp))
     }
 }
-
 
 interface ComposeSpacing {
     @Composable

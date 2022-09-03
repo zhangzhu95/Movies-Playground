@@ -1,7 +1,10 @@
 package com.zhangzhu95.retrofit.di
 
+import com.zhangzhu95.data.actors.ActorsRemoteSource
 import com.zhangzhu95.data.movies.MoviesRemoteSource
+import com.zhangzhu95.retrofit.data.ActorsRemoteDataSourceImpl
 import com.zhangzhu95.retrofit.data.MoviesRemoteDataSourceImpl
+import com.zhangzhu95.retrofit.services.ActorsService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,4 +15,7 @@ import dagger.hilt.components.SingletonComponent
 abstract class RemoteDataSourceModule {
     @Binds
     abstract fun moviesService(source: MoviesRemoteDataSourceImpl): MoviesRemoteSource
+
+    @Binds
+    abstract fun actorsService(source: ActorsRemoteDataSourceImpl): ActorsRemoteSource
 }

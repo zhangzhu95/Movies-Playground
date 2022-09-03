@@ -10,7 +10,6 @@ import javax.inject.Inject
 class MoviesRemoteDataSourceImpl @Inject constructor(
     private val service: MoviesService
 ) : MoviesRemoteSource, RemoteDataSource {
-
     override suspend fun getTrending(): Response<MoviesListResponse> = getBasicResult {
         service.getTrending()
     }

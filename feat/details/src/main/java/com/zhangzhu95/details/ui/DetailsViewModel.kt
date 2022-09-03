@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.zhangzhu95.core.ui.StateViewModel
 import com.zhangzhu95.data.networking.Response
+import com.zhangzhu95.domain.actors.FetchMovieActorsUseCase
 import com.zhangzhu95.domain.movies.FetchDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class DetailsViewModel @Inject constructor(
     private val fetchDetailsUseCase: FetchDetailsUseCase,
+    private val fetchMovieActorsUseCase: FetchMovieActorsUseCase,
     savedStateHandle: SavedStateHandle
 ) : StateViewModel<DetailsViewState>(DetailsViewState.Idle) {
 
@@ -22,6 +24,21 @@ internal class DetailsViewModel @Inject constructor(
 
     init {
         loadDetails()
+        loadActors()
+    }
+
+    private fun loadActors() {
+        viewModelScope.launch {
+            if (movieId.isNullOrEmpty()) {
+                return@launch
+            }
+
+            val result = fetchMovieActorsUseCase(movieId)
+            viewState.value = when (result) {
+                is Response.Success -> DetailsViewState.Actors(result.data!!.cast)
+                is Response.Error -> DetailsViewState.Error(result.message)
+            }
+        }
     }
 
     private fun loadDetails() {
@@ -36,7 +53,7 @@ internal class DetailsViewModel @Inject constructor(
             val result = fetchDetailsUseCase(movieId)
 
             viewState.value = when (result) {
-                is Response.Success -> DetailsViewState.Success(result.data!!)
+                is Response.Success -> DetailsViewState.Details(result.data!!)
                 is Response.Error -> DetailsViewState.Error(result.message)
             }
         }
