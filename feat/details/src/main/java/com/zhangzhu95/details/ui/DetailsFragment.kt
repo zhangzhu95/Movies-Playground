@@ -127,14 +127,20 @@ fun MovieDetails(
                 )
                 Spacing.Vertical.Medium()
 
-                // Categories
-                LazyRow {
-                    items(details.genres) { genre ->
-                        Chip(text = genre.name)
-                        Spacing.Vertical.Tiny()
+                Row {
+                    // Category
+                    details.genres.firstOrNull()?.let {
+                        Chip(text = it.name)
+                        Spacing.Horizontal.Tiny()
                     }
+
+                    // Rating
+                    Chip(
+                        text = details.rating,
+                        icon = R.drawable.ic_baseline_star_24
+                    )
                 }
-                Spacing.Vertical.Big()
+                Spacing.Vertical.Medium()
 
                 // Title
                 Text(details.title, fontSize = 24.sp, color = Color.White)
@@ -169,6 +175,7 @@ fun ActorsList(actors: List<Actor>, onActorClicked: (Int) -> Unit) {
                     character,
                     onActorClicked
                 )
+                Spacing.Horizontal.Tiny()
             }
         })
     }

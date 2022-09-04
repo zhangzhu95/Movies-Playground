@@ -1,6 +1,7 @@
 package com.zhangzhu95.data.movies.models
 
 import com.google.gson.annotations.SerializedName
+import com.zhangzhu95.core.helpers.extensions.round
 
 data class MovieDetails(
     @SerializedName("backdrop_path")
@@ -26,7 +27,11 @@ data class MovieDetails(
     @SerializedName("vote_count")
     val voteCount: Int = 0,
     val runtime: Int = 0
-)
+) {
+    val rating by lazy {
+        voteAverage.round(1)
+    }
+}
 
 data class MovieGenres(
     val id: Int = 0,

@@ -36,7 +36,7 @@ fun MovieItem(
 
 @Preview(showBackground = true)
 @Composable
-fun MovieItemPreview() {
+private fun MovieItemPreview() {
     AppTheme {
         Surface {
             MovieItem {}

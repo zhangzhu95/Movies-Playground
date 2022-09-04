@@ -56,7 +56,7 @@ class Spacing {
         }
 
         @Composable
-        fun Horizontal(value: Int) = Spacer(modifier = Modifier.padding(vertical = value.dp))
+        fun Horizontal(value: Int) = Spacer(modifier = Modifier.padding(horizontal = value.dp))
     }
 }
 

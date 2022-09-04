@@ -89,7 +89,7 @@ fun VerticalMovieItem(
 
 @Preview(showBackground = true)
 @Composable
-fun VerticalMovieItemPreview() {
+private fun VerticalMovieItemPreview() {
     AppTheme {
         Surface(
             modifier = Modifier.padding(20.dp)
