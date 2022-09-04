@@ -10,9 +10,7 @@ sealed class DetailsViewState : ViewState {
 
     object Idle : DetailsViewState()
 
-    data class Details(val data: MovieDetails) : DetailsViewState()
-
-    data class Actors(val data: List<Actor>) : DetailsViewState()
+    data class Success(val details: MovieDetails, val actors: List<Actor>) : DetailsViewState()
 
     data class Error(val error: String) : DetailsViewState()
 

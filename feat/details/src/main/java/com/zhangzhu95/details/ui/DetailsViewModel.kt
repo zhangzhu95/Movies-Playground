@@ -7,6 +7,7 @@ import com.zhangzhu95.data.networking.Response
 import com.zhangzhu95.domain.actors.FetchMovieActorsUseCase
 import com.zhangzhu95.domain.movies.FetchDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,39 +25,29 @@ internal class DetailsViewModel @Inject constructor(
 
     init {
         loadDetails()
-        loadActors()
-    }
-
-    private fun loadActors() {
-        viewModelScope.launch {
-            if (movieId.isNullOrEmpty()) {
-                return@launch
-            }
-
-            val result = fetchMovieActorsUseCase(movieId)
-            viewState.value = when (result) {
-                is Response.Success -> DetailsViewState.Actors(result.data!!.cast)
-                is Response.Error -> DetailsViewState.Error(result.message)
-            }
-        }
     }
 
     private fun loadDetails() {
         viewModelScope.launch {
-
             if (movieId.isNullOrEmpty()) {
-                viewState.value = DetailsViewState.InvalidMovieId
                 return@launch
             }
 
             viewState.value = DetailsViewState.Loading
-            val result = fetchDetailsUseCase(movieId)
 
-            viewState.value = when (result) {
-                is Response.Success -> DetailsViewState.Details(result.data!!)
-                is Response.Error -> DetailsViewState.Error(result.message)
+            val detailsCall = async { fetchDetailsUseCase(movieId) }
+            val actorsCall = async { fetchMovieActorsUseCase(movieId) }
+
+            val details = detailsCall.await()
+            val actors = actorsCall.await()
+
+            viewState.value = when (details) {
+                is Response.Success -> DetailsViewState.Success(
+                    details.data!!,
+                    (actors as? Response.Success)?.data?.cast ?: emptyList()
+                )
+                is Response.Error -> DetailsViewState.Error(details.message)
             }
         }
     }
-
 }

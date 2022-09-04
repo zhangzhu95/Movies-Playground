@@ -11,6 +11,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,7 +26,7 @@ fun CastItem(
     id: Int = 0,
     name: String,
     posterUrl: String = "",
-    roleName: String,
+    character: String,
     onClick: (Int) -> Unit
 ) {
     Column(Modifier.width(120.dp)) {
@@ -42,12 +43,13 @@ fun CastItem(
         }
         Text(
             name,
-            fontSize = 16.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 2,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            color = Color.White
         )
-        Text(roleName, fontSize = 12.sp, fontStyle = FontStyle.Italic)
+        Text(character, fontSize = 14.sp, fontStyle = FontStyle.Italic, color = Color.White)
     }
 }
 
@@ -56,7 +58,7 @@ fun CastItem(
 fun CastItemPreview() {
     AppTheme {
         Surface {
-            CastItem(name = "Morgan Freeman", roleName = "Jango") {}
+            CastItem(name = "Morgan Freeman", character = "Jango") {}
         }
     }
 }

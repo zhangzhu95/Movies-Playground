@@ -6,6 +6,6 @@ data class Actor(
     val id: Int = 0,
     val name: String = "",
     @SerializedName("profile_path")
-    val profilePath: String = "",
+    val profilePath: String? = "",
     val character: String = ""
 )

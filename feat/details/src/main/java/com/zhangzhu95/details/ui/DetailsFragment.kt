@@ -6,13 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -38,13 +32,12 @@ import androidx.fragment.app.viewModels
 import com.zhangzhu95.core.R
 import com.zhangzhu95.core.helpers.extensions.toBigPosterURL
 import com.zhangzhu95.core.helpers.extensions.toDuration
-import com.zhangzhu95.core.ui.widgets.Chip
-import com.zhangzhu95.core.ui.widgets.FadedImage
-import com.zhangzhu95.core.ui.widgets.LoadingView
-import com.zhangzhu95.core.ui.widgets.Spacing
+import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
+import com.zhangzhu95.core.ui.widgets.*
 import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 import com.zhangzhu95.core.ui.widgets.styles.Blackish
 import com.zhangzhu95.core.ui.widgets.styles.DarkerWhite
+import com.zhangzhu95.data.movies.models.Actor
 import com.zhangzhu95.data.movies.models.MovieDetails
 import com.zhangzhu95.data.movies.models.MovieGenres
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,8 +66,10 @@ class DetailsFragment : Fragment() {
                         viewModel.viewState.collectAsState(initial = DetailsViewState.Loading).value
                     when (state) {
                         is DetailsViewState.Loading -> LoadingView()
-                        is DetailsViewState.Details -> MovieDetails(state.data) {
-                            navigation.discoverMovie(requireContext(), state.data.homepage)
+                        is DetailsViewState.Success -> {
+                            MovieDetails(state.details, state.actors, {}) {
+                                navigation.discoverMovie(requireContext(), state.details.homepage)
+                            }
                         }
                         else -> Text(text = "State not handled")
                     }
@@ -85,7 +80,12 @@ class DetailsFragment : Fragment() {
 }
 
 @Composable
-fun MovieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
+fun MovieDetails(
+    details: MovieDetails,
+    actors: List<Actor>,
+    onActorClicked: (Int) -> Unit,
+    onPlayClicked: () -> Unit
+) {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = Modifier
@@ -97,7 +97,7 @@ fun MovieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
             Box(contentAlignment = Alignment.Center) {
                 // Poster
                 FadedImage(
-                    url = details.backdropPath.toBigPosterURL(),
+                    url = (details.backdropPath ?: details.posterPath).toBigPosterURL(),
                     placeholderRes = R.mipmap.movie_poster,
                     modifier = Modifier.height(400.dp)
                 )
@@ -148,8 +148,29 @@ fun MovieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
 
                 // Description
                 Text(details.overview, color = DarkerWhite)
+                Spacing.Vertical.Small()
+
+                // Actors
+                ActorsList(actors = actors, onActorClicked = onActorClicked)
             }
         }
+    }
+}
+
+@Composable
+fun ActorsList(actors: List<Actor>, onActorClicked: (Int) -> Unit) {
+    LazyRow {
+        items(count = actors.size, key = { actors[it].id }, itemContent = { index ->
+            actors[index].apply {
+                CastItem(
+                    id,
+                    name,
+                    profilePath.orEmpty().toSmallPosterURL(),
+                    character,
+                    onActorClicked
+                )
+            }
+        })
     }
 }
 
@@ -169,7 +190,13 @@ fun PreviewMovieDetails() {
                 voteAverage = 8.5,
                 tagline = text,
                 overview = stringResource(id = R.string.placeholder_description)
-            )
-        ) {}
+            ),
+            actors = listOf(
+                Actor(0, "Will Smith", character = "Robert Neville"),
+                Actor(1, "Alice Braga", character = "Anna"),
+                Actor(2, "Charlie Tahan", character = "Ethan"),
+            ),
+            {}, {}
+        )
     }
 }
