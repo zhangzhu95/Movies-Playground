@@ -30,6 +30,7 @@ import androidx.navigation.findNavController
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
 import com.zhangzhu95.core.ui.widgets.LoadingView
 import com.zhangzhu95.core.ui.widgets.MovieItem
+import com.zhangzhu95.core.ui.widgets.SearchBar
 import com.zhangzhu95.core.ui.widgets.Spacing
 import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 import com.zhangzhu95.data.fakes.fakeMovies
@@ -73,12 +74,14 @@ internal fun HomeScreen(
     onMovieSelected: (Int) -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacing.Vertical.Bigger()
+
+        Spacing.Vertical.Tiny()
+        SearchBar(hint = R.string.search_movie_hint)
 
         when (viewState) {
             is HomeViewState.Loading -> LoadingView()
             is HomeViewState.Success -> {
-                LazyColumn {
+                LazyColumn(contentPadding = PaddingValues(vertical = 10.dp)) {
                     items(count = viewState.list.size, key = { viewState.list[it].sectionTitle }) {
                         RenderHomeSection(
                             title = viewState.list[it].sectionTitle,
