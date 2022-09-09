@@ -1,10 +1,13 @@
 package com.zhangzhu95.trending.ui
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhangzhu95.core.networking.Response
+import com.zhangzhu95.data.movies.models.MoviesListResponse
 import com.zhangzhu95.domain.movies.FetchTopRatedMoviesUseCase
 import com.zhangzhu95.domain.movies.FetchTrendingUseCase
+import com.zhangzhu95.domain.movies.FetchUpcomingMoviesUseCase
 import com.zhangzhu95.trending.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,44 +18,50 @@ import javax.inject.Inject
 internal class HomeViewModel @Inject constructor(
     private val fetchTrendingViewState: FetchTrendingUseCase,
     private val fetchTopRatedMoviesUseCase: FetchTopRatedMoviesUseCase,
+    private val fetchUpcomingMoviesUseCase: FetchUpcomingMoviesUseCase,
 ) : ViewModel() {
 
-    val viewState = MutableStateFlow<HomeViewState>(HomeViewState.Idle)
+    val viewState = MutableStateFlow<HomeViewState>(HomeViewState.Loading)
 
     init {
         loadTrending()
         loadTopRated()
+        loadUpcoming()
     }
 
     private fun loadTrending() {
         viewModelScope.launch {
-            viewState.value = HomeViewState.Loading
-            val result = fetchTrendingViewState()
-            viewState.value = when (result) {
-                is Response.Success -> getSectionsUpdatedState(
-                    HomeSections.HorizontalMoviesSection(
-                        R.string.trending,
-                        result.data?.results.orEmpty()
-                    )
-                )
-                is Response.Error -> HomeViewState.Error(result.message)
-            }
+            val response = fetchTrendingViewState()
+            handleMoviesSectionResponse(R.string.trending, response)
         }
     }
 
     private fun loadTopRated() {
         viewModelScope.launch {
-            viewState.value = HomeViewState.Loading
-            val result = fetchTopRatedMoviesUseCase()
-            viewState.value = when (result) {
-                is Response.Success -> getSectionsUpdatedState(
-                    HomeSections.HorizontalMoviesSection(
-                        R.string.top_rated,
-                        result.data?.results.orEmpty()
-                    )
+            val response = fetchTopRatedMoviesUseCase()
+            handleMoviesSectionResponse(R.string.top_rated, response)
+        }
+    }
+
+    private fun loadUpcoming() {
+        viewModelScope.launch {
+            val response = fetchUpcomingMoviesUseCase()
+            handleMoviesSectionResponse(R.string.upcoming, response)
+        }
+    }
+
+    private fun handleMoviesSectionResponse(
+        @StringRes sectionTitle: Int,
+        response: Response<MoviesListResponse>
+    ) {
+        viewState.value = when (response) {
+            is Response.Success -> getSectionsUpdatedState(
+                HomeSections.HorizontalMoviesSection(
+                    sectionTitle,
+                    response.data?.results.orEmpty()
                 )
-                is Response.Error -> HomeViewState.Error(result.message)
-            }
+            )
+            is Response.Error -> HomeViewState.Error(response.message)
         }
     }
 

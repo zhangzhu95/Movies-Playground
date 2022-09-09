@@ -21,4 +21,8 @@ class MoviesRemoteDataSourceImpl @Inject constructor(
     override suspend fun getDetails(id: String): Response<MovieDetails> = getBasicResult {
         service.getDetails(id)
     }
+
+    override suspend fun getUpcoming(): Response<MoviesListResponse> = getBasicResult {
+        service.getUpcoming()
+    }
 }

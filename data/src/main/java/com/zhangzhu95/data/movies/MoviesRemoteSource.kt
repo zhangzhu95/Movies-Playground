@@ -11,4 +11,6 @@ interface MoviesRemoteSource {
     suspend fun getTopRated(): Response<MoviesListResponse>
 
     suspend fun getDetails(id: String): Response<MovieDetails>
+
+    suspend fun getUpcoming(): Response<MoviesListResponse>
 }

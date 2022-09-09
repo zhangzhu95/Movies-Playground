@@ -14,6 +14,9 @@ interface MoviesService {
     @GET("movie/top_rated")
     suspend fun getTopRated(): Response<MoviesListResponse>
 
+    @GET("movie/upcoming")
+    suspend fun getUpcoming(): Response<MoviesListResponse>
+
     @GET("movie/{id}")
     suspend fun getDetails(@Path("id") id: String): Response<MovieDetails>
 }

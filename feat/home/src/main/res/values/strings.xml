@@ -2,4 +2,5 @@
 <resources>
     <string name="trending">Trending</string>
     <string name="top_rated">Top Rated</string>
+    <string name="upcoming">Upcoming</string>
 </resources>
