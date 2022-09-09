@@ -1,6 +1,6 @@
 package com.zhangzhu95.retrofit.data
 
-import com.zhangzhu95.data.networking.Response
+import com.zhangzhu95.core.networking.Response
 import timber.log.Timber
 
 @Suppress("TooGenericExceptionCaught")

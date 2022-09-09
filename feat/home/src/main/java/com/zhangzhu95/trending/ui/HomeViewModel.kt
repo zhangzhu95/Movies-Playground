@@ -2,7 +2,7 @@ package com.zhangzhu95.trending.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zhangzhu95.data.networking.Response
+import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.domain.movies.FetchTopRatedMoviesUseCase
 import com.zhangzhu95.domain.movies.FetchTrendingUseCase
 import com.zhangzhu95.trending.R

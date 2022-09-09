@@ -1,6 +1,6 @@
 package com.zhangzhu95.retrofit.services
 
-import com.zhangzhu95.core.data.networking.details.MovieDetails
+import com.zhangzhu95.data.movies.models.MovieDetails
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
