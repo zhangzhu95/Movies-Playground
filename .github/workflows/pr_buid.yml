@@ -4,17 +4,7 @@ on: [ pull_request ]
 
 jobs:
   build_build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/gradle_setup.yml@main
-      - name: Build with Gradle
-        run: ./gradlew build -x detekt
+    uses: ./.github/workflows/gradle_setup.yml@main
 
   build_test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/gradle_setup.yml@main
-      - name: Build with Gradle
-        run: ./gradlew test
+    uses: ./.github/workflows/gradle_setup.yml@main
