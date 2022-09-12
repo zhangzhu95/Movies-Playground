@@ -1,0 +1,18 @@
+name: PR Build and Test
+
+on: [ pull_request ]
+
+jobs:
+  build_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/gradle_setup
+      - name: Build with Gradle
+        run: ./gradlew build -x detekt
+
+  build_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/gradle_setup
+      - name: Build with Gradle
+        run: ./gradlew test
