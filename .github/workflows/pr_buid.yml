@@ -4,7 +4,7 @@ on: [ pull_request ]
 
 jobs:
   build_build:
-    uses: ./.github/workflows/gradle_setup.yml@main
+    uses: ./.github/workflows/gradle_setup.yml
 
   build_test:
-    uses: ./.github/workflows/gradle_setup.yml@main
+    uses: ./.github/workflows/gradle_setup.yml
