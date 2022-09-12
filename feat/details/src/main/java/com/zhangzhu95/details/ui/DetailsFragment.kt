@@ -6,9 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -33,7 +39,11 @@ import com.zhangzhu95.core.R
 import com.zhangzhu95.core.helpers.extensions.toBigPosterURL
 import com.zhangzhu95.core.helpers.extensions.toDuration
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
-import com.zhangzhu95.core.ui.widgets.*
+import com.zhangzhu95.core.ui.widgets.CastItem
+import com.zhangzhu95.core.ui.widgets.Chip
+import com.zhangzhu95.core.ui.widgets.FadedImage
+import com.zhangzhu95.core.ui.widgets.LoadingView
+import com.zhangzhu95.core.ui.widgets.Spacing
 import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 import com.zhangzhu95.core.ui.widgets.styles.Blackish
 import com.zhangzhu95.core.ui.widgets.styles.DarkerWhite
@@ -127,14 +137,20 @@ fun MovieDetails(
                 )
                 Spacing.Vertical.Medium()
 
-                // Categories
-                LazyRow {
-                    items(details.genres) { genre ->
-                        Chip(text = genre.name)
-                        Spacing.Vertical.Tiny()
+                Row {
+                    // Category
+                    details.genres.firstOrNull()?.let {
+                        Chip(text = it.name)
+                        Spacing.Horizontal.Tiny()
                     }
+
+                    // Rating
+                    Chip(
+                        text = details.rating,
+                        icon = R.drawable.ic_baseline_star_24
+                    )
                 }
-                Spacing.Vertical.Big()
+                Spacing.Vertical.Medium()
 
                 // Title
                 Text(details.title, fontSize = 24.sp, color = Color.White)
@@ -169,6 +185,7 @@ fun ActorsList(actors: List<Actor>, onActorClicked: (Int) -> Unit) {
                     character,
                     onActorClicked
                 )
+                Spacing.Horizontal.Tiny()
             }
         })
     }

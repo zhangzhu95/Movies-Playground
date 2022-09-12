@@ -43,17 +43,17 @@ fun CastItem(
         }
         Text(
             name,
-            fontSize = 20.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             color = Color.White
         )
-        Text(character, fontSize = 14.sp, fontStyle = FontStyle.Italic, color = Color.White)
+        Text(character, fontSize = 14.sp, fontStyle = FontStyle.Italic, color = Color.Gray)
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 fun CastItemPreview() {
     AppTheme {

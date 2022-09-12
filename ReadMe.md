@@ -1,4 +1,6 @@
 # Movies Playground
+(Under Dev)
+
 Uses the following libraries:
 - [Native Splash Screen] (To Do)
 - [Jetpack compose]

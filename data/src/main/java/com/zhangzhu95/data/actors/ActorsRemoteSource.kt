@@ -1,7 +1,7 @@
 package com.zhangzhu95.data.actors
 
 import com.zhangzhu95.data.movies.models.CastResponse
-import com.zhangzhu95.data.networking.Response
+import com.zhangzhu95.core.networking.Response
 
 interface ActorsRemoteSource {
 

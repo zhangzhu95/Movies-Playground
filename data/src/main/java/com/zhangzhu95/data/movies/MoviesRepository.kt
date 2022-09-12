@@ -10,4 +10,5 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: MoviesR
 
     suspend fun fetchDetails(id: String) = remoteDataSource.getDetails(id)
 
+    suspend fun fetchUpcoming() = remoteDataSource.getUpcoming()
 }

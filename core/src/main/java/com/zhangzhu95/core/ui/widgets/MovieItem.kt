@@ -1,7 +1,6 @@
 package com.zhangzhu95.core.ui.widgets
 
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +18,7 @@ import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 fun MovieItem(
     id: Int = 0,
     postureUrl: String = "",
-    onMovieClicked: (Int) -> Unit
+    onMovieClicked: (Int) -> Unit,
 ) {
     TextButton(onClick = { onMovieClicked(id) }) {
         RemoteImage(
@@ -36,7 +35,7 @@ fun MovieItem(
 
 @Preview(showBackground = true)
 @Composable
-fun MovieItemPreview() {
+private fun MovieItemPreview() {
     AppTheme {
         Surface {
             MovieItem {}

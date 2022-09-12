@@ -38,6 +38,8 @@ dependencies {
     debugApi "androidx.customview:customview:1.2.0-alpha01"
     debugApi "androidx.customview:customview-poolingcontainer:1.0.0"
     api 'com.jakewharton.timber:timber:5.0.1'
+    api "com.google.accompanist:accompanist-pager:0.25.1"
+    api "androidx.compose.ui:ui-util:1.2.1"
 
     // Coil --- Coil --- Coil --- Coil
     api "io.coil-kt:coil-compose:2.0.0-rc01"

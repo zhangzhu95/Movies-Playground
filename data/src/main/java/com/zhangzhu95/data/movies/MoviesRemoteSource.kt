@@ -1,8 +1,8 @@
 package com.zhangzhu95.data.movies
 
+import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.data.movies.models.MovieDetails
 import com.zhangzhu95.data.movies.models.MoviesListResponse
-import com.zhangzhu95.data.networking.Response
 
 interface MoviesRemoteSource {
 
@@ -11,4 +11,6 @@ interface MoviesRemoteSource {
     suspend fun getTopRated(): Response<MoviesListResponse>
 
     suspend fun getDetails(id: String): Response<MovieDetails>
+
+    suspend fun getUpcoming(): Response<MoviesListResponse>
 }

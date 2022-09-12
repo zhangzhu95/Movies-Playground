@@ -1,15 +1,13 @@
 package com.zhangzhu95.domain.movies
 
+import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.data.movies.MoviesRepository
 import com.zhangzhu95.data.movies.models.MoviesListResponse
-import com.zhangzhu95.core.networking.Response
 import javax.inject.Inject
 
-class FetchTrendingUseCase @Inject constructor(
-    private val moviesRepository: MoviesRepository
-) {
+class FetchUpcomingMoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepository) {
 
     suspend operator fun invoke(): Response<MoviesListResponse> {
-        return moviesRepository.fetchTrendingAll()
+        return moviesRepository.fetchUpcoming()
     }
 }

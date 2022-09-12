@@ -3,7 +3,7 @@ package com.zhangzhu95.retrofit.data
 import com.zhangzhu95.data.movies.MoviesRemoteSource
 import com.zhangzhu95.data.movies.models.MovieDetails
 import com.zhangzhu95.data.movies.models.MoviesListResponse
-import com.zhangzhu95.data.networking.Response
+import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.retrofit.services.MoviesService
 import javax.inject.Inject
 
@@ -20,5 +20,9 @@ class MoviesRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getDetails(id: String): Response<MovieDetails> = getBasicResult {
         service.getDetails(id)
+    }
+
+    override suspend fun getUpcoming(): Response<MoviesListResponse> = getBasicResult {
+        service.getUpcoming()
     }
 }

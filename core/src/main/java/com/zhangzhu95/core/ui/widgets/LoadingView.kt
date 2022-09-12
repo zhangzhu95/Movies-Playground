@@ -26,7 +26,7 @@ fun LoadingView(text: String? = null) {
 
 @Preview(showBackground = true)
 @Composable
-fun previewLoadingView() {
+private fun previewLoadingView() {
     AppTheme {
         LoadingView()
     }

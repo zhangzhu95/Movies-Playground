@@ -3,7 +3,7 @@ package com.zhangzhu95.details.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.zhangzhu95.core.ui.StateViewModel
-import com.zhangzhu95.data.networking.Response
+import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.domain.actors.FetchMovieActorsUseCase
 import com.zhangzhu95.domain.movies.FetchDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

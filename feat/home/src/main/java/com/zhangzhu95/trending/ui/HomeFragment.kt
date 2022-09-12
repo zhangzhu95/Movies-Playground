@@ -8,12 +8,14 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -28,8 +30,10 @@ import androidx.navigation.findNavController
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
 import com.zhangzhu95.core.ui.widgets.LoadingView
 import com.zhangzhu95.core.ui.widgets.MovieItem
+import com.zhangzhu95.core.ui.widgets.SearchBar
 import com.zhangzhu95.core.ui.widgets.Spacing
 import com.zhangzhu95.core.ui.widgets.styles.AppTheme
+import com.zhangzhu95.data.fakes.fakeMovies
 import com.zhangzhu95.data.movies.models.Movie
 import com.zhangzhu95.trending.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,9 +58,8 @@ class HomeFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 AppTheme {
-                    val topRatedState by viewModel.topRatedViewState.collectAsState(initial = HomeViewState.Loading)
-                    val trendingState by viewModel.trendingViewState.collectAsState(initial = HomeViewState.Loading)
-                    HomeScreen(trendingState, topRatedState) {
+                    val viewState by viewModel.viewState.collectAsState()
+                    HomeScreen(viewState) {
                         navigation.goToMovieDetails(findNavController(), movieId = it.toString())
                     }
                 }
@@ -67,44 +70,53 @@ class HomeFragment : Fragment() {
 
 @Composable
 internal fun HomeScreen(
-    trendingState: HomeViewState,
-    topRatedState: HomeViewState,
-    onSelectMovie: (Int) -> Unit
+    viewState: HomeViewState,
+    onMovieSelected: (Int) -> Unit
 ) {
-    Column {
-        Spacing.Vertical.Bigger()
-        RenderHomeSection(
-            title = R.string.trending,
-            state = trendingState,
-            onSelectMovie = onSelectMovie
-        )
-        Spacing.Vertical.Medium()
-        RenderHomeSection(
-            title = R.string.top_rated,
-            state = topRatedState,
-            onSelectMovie = onSelectMovie
-        )
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+        Spacing.Vertical.Tiny()
+        SearchBar(hint = R.string.search_movie_hint)
+
+        when (viewState) {
+            is HomeViewState.Loading -> LoadingView()
+            is HomeViewState.Success -> {
+                LazyColumn(contentPadding = PaddingValues(vertical = 10.dp)) {
+                    items(count = viewState.list.size, key = { viewState.list[it].sectionTitle }) {
+                        RenderHomeSection(
+                            title = viewState.list[it].sectionTitle,
+                            section = viewState.list[it],
+                            onMovieSelected = onMovieSelected
+                        )
+                        Spacing.Vertical.Medium()
+                    }
+                }
+            }
+            else -> {}
+        }
     }
 }
 
 @Composable
 internal fun RenderHomeSection(
     @StringRes title: Int,
-    state: HomeViewState,
-    onSelectMovie: (Int) -> Unit
+    section: HomeSections,
+    onMovieSelected: (Int) -> Unit
 ) {
-    when (state) {
-        is HomeViewState.Success -> HomeSectionList(title = title, state = state, onSelectMovie)
-        is HomeViewState.Loading -> LoadingView()
-        else -> Text(text = "Unknown state")
+    when (section) {
+        is HomeSections.HorizontalMoviesSection -> HomeSectionList(
+            title = title,
+            movies = section.list,
+            onMovieSelected
+        )
     }
 }
 
 @Composable
 internal fun HomeSectionList(
     @StringRes title: Int,
-    state: HomeViewState.Success,
-    onSelectMovie: (Int) -> Unit
+    movies: List<Movie>,
+    onMovieSelected: (Int) -> Unit
 ) {
 
     Column {
@@ -116,13 +128,17 @@ internal fun HomeSectionList(
             fontWeight = FontWeight.ExtraBold
         )
 
-        LazyRow(contentPadding = PaddingValues(horizontal = 15.dp)) {
-            items(count = state.list.size, key = { state.list[it].id }, itemContent = { index ->
-                val movie = state.list[index]
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 15.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            items(count = movies.size, key = { movies[it].id }, itemContent = { index ->
+                val movie = movies[index]
                 MovieItem(
                     movie.id,
                     movie.posterPath.toSmallPosterURL(),
-                    onSelectMovie
+                    onMovieSelected
                 )
             })
         }
@@ -131,19 +147,18 @@ internal fun HomeSectionList(
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview2() {
+private fun HomePreview() {
 
     val currentState = HomeViewState.Success(
         listOf(
-            Movie(title = "Movie 1"),
-            Movie(title = "Movie 2"),
-            Movie(title = "Movie 3"),
+            HomeSections.HorizontalMoviesSection(title = R.string.trending, list = fakeMovies),
+            HomeSections.HorizontalMoviesSection(title = R.string.top_rated, list = fakeMovies),
         )
     )
 
     AppTheme {
         Surface {
-            HomeScreen(currentState, currentState) {}
+            HomeScreen(currentState) {}
         }
     }
 }
