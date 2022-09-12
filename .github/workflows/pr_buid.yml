@@ -7,13 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/gradle_setup
+      - uses: ./.github/workflows/gradle_setup.yml
       - name: Build with Gradle
         run: ./gradlew build -x detekt
 
   build_test:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/gradle_setup
+      - uses: ./.github/workflows/gradle_setup.yml
       - name: Build with Gradle
         run: ./gradlew test
