@@ -4,6 +4,9 @@ plugins {
 }
 
 apply from: "$rootDir/android.gradle"
+android {
+    namespace 'com.zhangzhu95.thirdparty'
+}
 
 dependencies {
     api project(path: ':core')

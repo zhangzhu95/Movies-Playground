@@ -5,6 +5,9 @@ plugins {
 
 apply from: "$rootDir/android.gradle"
 apply from: "$rootDir/android-hilt.gradle"
+android {
+    namespace 'com.zhangzhu95.retrofit'
+}
 
 dependencies {
     api project(path: ':thirdparty')
