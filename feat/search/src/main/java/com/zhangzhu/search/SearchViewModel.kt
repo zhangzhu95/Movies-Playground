@@ -17,19 +17,17 @@ class SearchViewModel @Inject constructor(
     val viewState = MutableStateFlow<SearchViewState>(SearchViewState.Start)
     var query = MutableStateFlow("")
 
-    fun search() {
-        viewModelScope.launch {
-            viewState.value = SearchViewState.Loading
-            val newState = when (val response = searchMoviesUseCase(query.value)) {
-                is Response.Success -> {
-                    val list = response.data?.results.orEmpty()
-                    if (list.isNotEmpty()) SearchViewState.SearchList(list) else SearchViewState.Empty
-                }
-
-                is Response.Error -> SearchViewState.Error(response.message)
+    fun search() = viewModelScope.launch {
+        viewState.value = SearchViewState.Loading
+        val newState = when (val response = searchMoviesUseCase(query.value)) {
+            is Response.Success -> {
+                val list = response.data?.results.orEmpty()
+                if (list.isNotEmpty()) SearchViewState.SearchList(list) else SearchViewState.Empty
             }
-            viewState.value = newState
+
+            is Response.Error -> SearchViewState.Error(response.message)
         }
+        viewState.value = newState
     }
 
     fun onSearchQueryChanged(newQuery: String) {

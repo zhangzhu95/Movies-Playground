@@ -29,36 +29,30 @@ internal class HomeViewModel @Inject constructor(
         loadUpcoming()
     }
 
-    private fun loadTrending() {
-        viewModelScope.launch {
-            val response = fetchTrendingViewState()
-            handleMoviesSectionResponse(R.string.trending, response)
-        }
+    private fun loadTrending() = viewModelScope.launch {
+        val response = fetchTrendingViewState()
+        handleMoviesSectionResponse(R.string.trending, response)
     }
 
-    private fun loadTopRated() {
-        viewModelScope.launch {
-            val response = fetchTopRatedMoviesUseCase()
-            handleMoviesSectionResponse(R.string.top_rated, response)
-        }
+
+    private fun loadTopRated() = viewModelScope.launch {
+        val response = fetchTopRatedMoviesUseCase()
+        handleMoviesSectionResponse(R.string.top_rated, response)
     }
 
-    private fun loadUpcoming() {
-        viewModelScope.launch {
-            val response = fetchUpcomingMoviesUseCase()
-            handleMoviesSectionResponse(R.string.upcoming, response)
-        }
+
+    private fun loadUpcoming() = viewModelScope.launch {
+        val response = fetchUpcomingMoviesUseCase()
+        handleMoviesSectionResponse(R.string.upcoming, response)
     }
 
     private fun handleMoviesSectionResponse(
-        @StringRes sectionTitle: Int,
-        response: Response<MoviesListResponse>
+        @StringRes sectionTitle: Int, response: Response<MoviesListResponse>
     ) {
         viewState.value = when (response) {
             is Response.Success -> getSectionsUpdatedState(
                 HomeSections.HorizontalMoviesSection(
-                    sectionTitle,
-                    response.data?.results.orEmpty()
+                    sectionTitle, response.data?.results.orEmpty()
                 )
             )
             is Response.Error -> HomeViewState.Error(response.message)
