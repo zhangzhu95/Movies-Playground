@@ -35,7 +35,7 @@ fun VerticalMovieItem(
     language: String = "EN",
     onMovieClicked: (Int) -> Unit
 ) {
-    Box(Modifier.padding(10.dp)) {
+    Box(Modifier.padding(horizontal = 10.dp)) {
         TextButton(onClick = { onMovieClicked(id) }) {
             Card(
                 modifier = Modifier.fillMaxWidth(),

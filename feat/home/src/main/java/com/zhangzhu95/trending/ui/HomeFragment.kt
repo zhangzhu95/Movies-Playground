@@ -38,6 +38,7 @@ import com.zhangzhu95.data.movies.models.Movie
 import com.zhangzhu95.trending.R
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.zhangzhu95.core.R as RC
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -59,9 +60,9 @@ class HomeFragment : Fragment() {
             setContent {
                 AppTheme {
                     val viewState by viewModel.viewState.collectAsState()
-                    HomeScreen(viewState) {
+                    HomeScreen(viewState, onMovieSelected = {
                         navigation.goToMovieDetails(findNavController(), movieId = it.toString())
-                    }
+                    }, onSearchClick = { navigation.goToSearch(findNavController()) })
                 }
             }
         }
@@ -71,12 +72,14 @@ class HomeFragment : Fragment() {
 @Composable
 internal fun HomeScreen(
     viewState: HomeViewState,
-    onMovieSelected: (Int) -> Unit
+    onMovieSelected: (Int) -> Unit,
+    onSearchClick: () -> Unit,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
         Spacing.Vertical.Tiny()
-        SearchBar(hint = R.string.search_movie_hint)
+
+        SearchBar(hint = RC.string.search_movie_hint, onTouch = onSearchClick)
 
         when (viewState) {
             is HomeViewState.Loading -> LoadingView()
@@ -158,7 +161,7 @@ private fun HomePreview() {
 
     AppTheme {
         Surface {
-            HomeScreen(currentState) {}
+            HomeScreen(currentState, {}, {})
         }
     }
 }

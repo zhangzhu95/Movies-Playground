@@ -12,4 +12,5 @@ dependencies {
     implementation project(path: ':core')
     implementation project(path: ':feat:home')
     implementation project(path: ':feat:details')
+    implementation project(path: ':feat:search')
 }

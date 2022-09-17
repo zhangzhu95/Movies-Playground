@@ -5,6 +5,7 @@ import com.zhangzhu95.data.movies.models.MoviesListResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MoviesService {
 
@@ -19,4 +20,7 @@ interface MoviesService {
 
     @GET("movie/{id}")
     suspend fun getDetails(@Path("id") id: String): Response<MovieDetails>
+
+    @GET("search/movie")
+    suspend fun searchMovies(@Query("query") query: String): Response<MoviesListResponse>
 }

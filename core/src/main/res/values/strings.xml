@@ -2,4 +2,5 @@
 <resources>
     <string name="placeholder_title">Lorem ipsum</string>
     <string name="placeholder_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit</string>
+    <string name="search_movie_hint">Search for a movie …</string>
 </resources>

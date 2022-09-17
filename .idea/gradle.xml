@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/feat" />
             <option value="$PROJECT_DIR$/feat/details" />
             <option value="$PROJECT_DIR$/feat/home" />
+            <option value="$PROJECT_DIR$/feat/search" />
             <option value="$PROJECT_DIR$/thirdparty" />
             <option value="$PROJECT_DIR$/thirdparty/retrofit" />
           </set>

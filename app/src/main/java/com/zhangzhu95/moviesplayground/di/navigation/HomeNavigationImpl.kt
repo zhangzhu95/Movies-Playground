@@ -13,4 +13,8 @@ object HomeNavigationImpl : HomeNavigation {
             )
         )
     }
+
+    override fun goToSearch(navController: NavController) {
+        navController.navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
+    }
 }

@@ -1,8 +1,7 @@
-package com.zhangzhu95.trending.ui
+package com.zhangzhu.search
 
 import androidx.navigation.NavController
 
-interface HomeNavigation {
+interface SearchNavigation {
     fun goToMovieDetails(navController: NavController, movieId: String)
-    fun goToSearch(navController: NavController)
 }

@@ -1,5 +1,6 @@
 package com.zhangzhu95.moviesplayground.di.navigation
 
+import com.zhangzhu.search.SearchNavigation
 import com.zhangzhu95.details.ui.DetailsNavigation
 import com.zhangzhu95.trending.ui.HomeNavigation
 import dagger.Module
@@ -16,4 +17,7 @@ class NavigationModule {
 
     @Provides
     fun provideDetailsNavigation(): DetailsNavigation = DetailsNavigationImpl
+
+    @Provides
+    fun provideSearchNavigation(): SearchNavigation = SearchNavigationImpl
 }
