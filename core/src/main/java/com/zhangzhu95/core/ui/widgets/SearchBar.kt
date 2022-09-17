@@ -14,10 +14,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,8 +35,11 @@ fun SearchBar(
     onValueChange: (String) -> Unit = {},
     editable: Boolean = true,
     onTouch: (() -> Unit)? = null,
-    onSearch: (() -> Unit)? = null
+    onSearch: (() -> Unit)? = null,
+    focused: Boolean = false
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,9 +51,14 @@ fun SearchBar(
         elevation = 5.dp,
     ) {
 
+        LaunchedEffect(Unit) {
+            if (focused) {
+                focusRequester.requestFocus()
+            }
+        }
+
         Row(
-            modifier = Modifier
-                .padding(10.dp), verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_search_24),
@@ -59,7 +69,8 @@ fun SearchBar(
 
             Box {
                 // Display the text field
-                BasicTextField(value = value,
+                BasicTextField(
+                    value = value,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = { onSearch?.invoke() }),
                     enabled = onTouch == null,
@@ -67,7 +78,13 @@ fun SearchBar(
                         if (editable) {
                             onValueChange(it)
                         }
-                    })
+                    },
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .fillMaxWidth(),
+                    singleLine = true,
+                    maxLines = 1
+                )
 
                 // Display the placeholder / hint
                 if (value.isEmpty() && hint != null) {

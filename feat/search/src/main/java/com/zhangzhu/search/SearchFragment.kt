@@ -77,7 +77,8 @@ fun SearchScreen(
             hint = RC.string.search_movie_hint,
             value = query,
             onValueChange = onQueryChanger,
-            onSearch = onSearch
+            onSearch = onSearch,
+            focused = true
         )
 
         when (viewState) {
