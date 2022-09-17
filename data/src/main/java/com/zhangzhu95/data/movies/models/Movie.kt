@@ -15,7 +15,7 @@ data class Movie(
     val originalTitle: String = "",
     val overview: String = "",
     @SerializedName("poster_path")
-    val posterPath: String = "",
+    val posterPath: String? = "",
     @SerializedName("media_type")
     val mediaType: String = "",
     val popularity: Double = 0.0,
