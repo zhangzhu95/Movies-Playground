@@ -13,6 +13,7 @@ android {
 dependencies {
     implementation project(path: ':thirdparty:retrofit')
     implementation project(path: ':core')
+    implementation project(path: ':feat:splash')
     implementation project(path: ':feat:home')
     implementation project(path: ':feat:details')
     implementation project(path: ':feat:search')
