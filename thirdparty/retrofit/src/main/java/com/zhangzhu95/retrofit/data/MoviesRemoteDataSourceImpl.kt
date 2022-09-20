@@ -26,8 +26,8 @@ class MoviesRemoteDataSourceImpl @Inject constructor(
         service.getUpcoming()
     }
 
-    override suspend fun searchMovies(query: String): Response<MoviesListResponse> =
+    override suspend fun searchMovies(query: String, page: Int): Response<MoviesListResponse> =
         getBasicResult {
-            service.searchMovies(query)
+            service.searchMovies(query, page)
         }
 }

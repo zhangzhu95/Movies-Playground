@@ -7,12 +7,8 @@ import com.zhangzhu95.data.movies.models.MovieDetails
 sealed interface DetailsViewState : ViewState {
 
     object Loading : DetailsViewState
-
     object Idle : DetailsViewState
-
     data class Success(val details: MovieDetails, val actors: List<Actor>) : DetailsViewState
-
     data class Error(val error: String) : DetailsViewState
-
     object InvalidMovieId : DetailsViewState
 }

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.domain.movies.SearchMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -12,22 +14,42 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchMoviesUseCase: SearchMoviesUseCase
-) : ViewModel() {
+) : ViewModel(), SearchPaginationActions {
 
     val viewState = MutableStateFlow<SearchViewState>(SearchViewState.Start)
+    val events = MutableSharedFlow<SearchViewEvent>()
     var query = MutableStateFlow("")
+    override var job: Job? = null
+    private val pagination = SearchPagination(this)
 
-    fun search() = viewModelScope.launch {
-        viewState.value = SearchViewState.Loading
-        val newState = when (val response = searchMoviesUseCase(query.value)) {
-            is Response.Success -> {
-                val list = response.data?.results.orEmpty()
-                if (list.isNotEmpty()) SearchViewState.SearchList(list) else SearchViewState.Empty
+    override fun loadMovies(page: Int) {
+        job = viewModelScope.launch {
+            events.emit(SearchViewEvent.Loading)
+
+            when (val response = searchMoviesUseCase(query.value, page)) {
+                is Response.Success -> {
+                    pagination.getSuccessState(
+                        viewState.value,
+                        response.data?.results.orEmpty()
+                    )?.let {
+                        viewState.value = it
+                    }
+                    events.emit(SearchViewEvent.Idle)
+                }
+                is Response.Error -> {
+                    viewState.value = SearchViewState.Idle
+                    events.emit(SearchViewEvent.Error(response.message))
+                }
             }
-
-            is Response.Error -> SearchViewState.Error(response.message)
         }
-        viewState.value = newState
+    }
+
+    fun onNewSearch() {
+        pagination.newSearch()
+    }
+
+    fun onLoadMore() {
+        pagination.loadMore()
     }
 
     fun onSearchQueryChanged(newQuery: String) {

@@ -6,7 +6,7 @@ import com.zhangzhu95.data.movies.models.MoviesListResponse
 import javax.inject.Inject
 
 class SearchMoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepository) {
-    suspend operator fun invoke(query: String): Response<MoviesListResponse> {
-        return moviesRepository.searchMovies(query)
+    suspend operator fun invoke(query: String, page: Int): Response<MoviesListResponse> {
+        return moviesRepository.searchMovies(query, page)
     }
 }

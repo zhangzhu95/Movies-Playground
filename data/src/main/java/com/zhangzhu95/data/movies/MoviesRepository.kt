@@ -12,5 +12,5 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: MoviesR
 
     suspend fun fetchUpcoming() = remoteDataSource.getUpcoming()
 
-    suspend fun searchMovies(query: String) = remoteDataSource.searchMovies(query)
+    suspend fun searchMovies(query: String, page: Int) = remoteDataSource.searchMovies(query, page)
 }

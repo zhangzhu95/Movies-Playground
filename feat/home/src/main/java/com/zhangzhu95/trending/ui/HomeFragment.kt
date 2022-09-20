@@ -60,9 +60,15 @@ class HomeFragment : Fragment() {
             setContent {
                 AppTheme {
                     val viewState by viewModel.viewState.collectAsState()
-                    HomeScreen(viewState, onMovieSelected = {
-                        navigation.goToMovieDetails(findNavController(), movieId = it.toString())
-                    }, onSearchClick = { navigation.goToSearch(findNavController()) })
+                    HomeScreen(
+                        viewState,
+                        onMovieSelected = {
+                            navigation.goToMovieDetails(
+                                findNavController(),
+                                movieId = it.toString()
+                            )
+                        }, onSearchClick = { navigation.goToSearch(findNavController()) }
+                    )
                 }
             }
         }

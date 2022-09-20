@@ -1,4 +1,4 @@
-name: Gradle Setup
+name: Build and Test
 
 on: [ workflow_call ]
 
@@ -17,3 +17,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew build -x detekt
