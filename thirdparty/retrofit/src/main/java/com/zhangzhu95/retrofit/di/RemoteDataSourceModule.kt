@@ -1,9 +1,9 @@
 package com.zhangzhu95.retrofit.di
 
-import com.zhangzhu95.core.data.networking.details.DetailsRemoteSource
-import com.zhangzhu95.core.data.networking.trending.TrendingRemoteSource
-import com.zhangzhu95.retrofit.data.DetailsRemoteSourceImpl
-import com.zhangzhu95.retrofit.data.TrendingRemoteSourceImpl
+import com.zhangzhu95.data.actors.ActorsRemoteSource
+import com.zhangzhu95.data.movies.MoviesRemoteSource
+import com.zhangzhu95.retrofit.data.ActorsRemoteDataSourceImpl
+import com.zhangzhu95.retrofit.data.MoviesRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,8 +13,8 @@ import dagger.hilt.components.SingletonComponent
 @Module
 abstract class RemoteDataSourceModule {
     @Binds
-    abstract fun trendingService(source: TrendingRemoteSourceImpl): TrendingRemoteSource
+    abstract fun moviesService(source: MoviesRemoteDataSourceImpl): MoviesRemoteSource
 
     @Binds
-    abstract fun detailsService(source: DetailsRemoteSourceImpl): DetailsRemoteSource
+    abstract fun actorsService(source: ActorsRemoteDataSourceImpl): ActorsRemoteSource
 }

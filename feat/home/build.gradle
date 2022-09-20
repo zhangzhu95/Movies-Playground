@@ -1,0 +1,16 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: "$rootDir/android.gradle"
+apply from: "$rootDir/android-hilt.gradle"
+android {
+    namespace 'com.zhangzhu95.trending'
+}
+
+dependencies {
+    implementation project(path: ':feat')
+    implementation project(path: ':data')
+    implementation project(path: ':domain')
+}

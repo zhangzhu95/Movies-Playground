@@ -1,7 +1,8 @@
 package com.zhangzhu95.moviesplayground.di.navigation
 
+import com.zhangzhu.search.SearchNavigation
 import com.zhangzhu95.details.ui.DetailsNavigation
-import com.zhangzhu95.trending.ui.TrendingNavigation
+import com.zhangzhu95.trending.ui.HomeNavigation
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,8 +13,11 @@ import dagger.hilt.android.components.ActivityComponent
 class NavigationModule {
 
     @Provides
-    fun provideTrendingNavigation(): TrendingNavigation = TrendingNavigationImpl
+    fun provideTrendingNavigation(): HomeNavigation = HomeNavigationImpl
 
     @Provides
     fun provideDetailsNavigation(): DetailsNavigation = DetailsNavigationImpl
+
+    @Provides
+    fun provideSearchNavigation(): SearchNavigation = SearchNavigationImpl
 }

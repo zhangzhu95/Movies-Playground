@@ -1,0 +1,14 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: "$rootDir/android.gradle"
+apply from: "$rootDir/android-hilt.gradle"
+android {
+    namespace 'com.zhangzhu95.domain'
+}
+
+dependencies {
+    api project(path: ':data')
+}

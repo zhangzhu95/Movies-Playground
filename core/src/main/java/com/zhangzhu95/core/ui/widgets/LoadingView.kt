@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zhangzhu95.core.ui.compose.AppTheme
+import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 
 @Suppress("FunctionNaming")
 @Composable
@@ -26,7 +26,7 @@ fun LoadingView(text: String? = null) {
 
 @Preview(showBackground = true)
 @Composable
-fun previewLoadingView() {
+private fun previewLoadingView() {
     AppTheme {
         LoadingView()
     }

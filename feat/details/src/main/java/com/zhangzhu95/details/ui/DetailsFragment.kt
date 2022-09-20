@@ -8,14 +8,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -37,16 +36,20 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.zhangzhu95.core.R
-import com.zhangzhu95.core.data.networking.details.MovieDetails
-import com.zhangzhu95.core.data.networking.details.MovieGenres
+import com.zhangzhu95.core.helpers.extensions.toBigPosterURL
 import com.zhangzhu95.core.helpers.extensions.toDuration
-import com.zhangzhu95.core.helpers.extensions.toPosterURL
-import com.zhangzhu95.core.ui.compose.AppTheme
-import com.zhangzhu95.core.ui.compose.Blackish
-import com.zhangzhu95.core.ui.compose.Chip
-import com.zhangzhu95.core.ui.compose.DarkerWhite
-import com.zhangzhu95.core.ui.compose.FadedImage
+import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
+import com.zhangzhu95.core.ui.widgets.CastItem
+import com.zhangzhu95.core.ui.widgets.Chip
+import com.zhangzhu95.core.ui.widgets.FadedImage
 import com.zhangzhu95.core.ui.widgets.LoadingView
+import com.zhangzhu95.core.ui.widgets.Spacing
+import com.zhangzhu95.core.ui.widgets.styles.AppTheme
+import com.zhangzhu95.core.ui.widgets.styles.Blackish
+import com.zhangzhu95.core.ui.widgets.styles.DarkerWhite
+import com.zhangzhu95.data.movies.models.Actor
+import com.zhangzhu95.data.movies.models.MovieDetails
+import com.zhangzhu95.data.movies.models.MovieGenres
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -73,8 +76,10 @@ class DetailsFragment : Fragment() {
                         viewModel.viewState.collectAsState(initial = DetailsViewState.Loading).value
                     when (state) {
                         is DetailsViewState.Loading -> LoadingView()
-                        is DetailsViewState.Success -> movieDetails(state.data) {
-                            navigation.discoverMovie(requireContext(), state.data.homepage)
+                        is DetailsViewState.Success -> {
+                            MovieDetails(state.details, state.actors, {}) {
+                                navigation.discoverMovie(requireContext(), state.details.homepage)
+                            }
                         }
                         else -> Text(text = "State not handled")
                     }
@@ -85,7 +90,12 @@ class DetailsFragment : Fragment() {
 }
 
 @Composable
-fun movieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
+fun MovieDetails(
+    details: MovieDetails,
+    actors: List<Actor>,
+    onActorClicked: (Int) -> Unit,
+    onPlayClicked: () -> Unit
+) {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = Modifier
@@ -97,7 +107,7 @@ fun movieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
             Box(contentAlignment = Alignment.Center) {
                 // Poster
                 FadedImage(
-                    url = details.backdrop_path.toPosterURL(),
+                    url = (details.backdropPath ?: details.posterPath).toBigPosterURL(),
                     placeholderRes = R.mipmap.movie_poster,
                     modifier = Modifier.height(400.dp)
                 )
@@ -125,48 +135,85 @@ fun movieDetails(details: MovieDetails, onPlayClicked: () -> Unit) {
                     textAlign = TextAlign.End,
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.padding(bottom = 16.dp))
+                Spacing.Vertical.Medium()
 
-                // Categories
-                LazyRow {
-                    items(details.genres) { genre ->
-                        Chip(text = genre.name)
-                        Spacer(modifier = Modifier.padding(horizontal = 5.dp))
+                Row {
+                    // Category
+                    details.genres.firstOrNull()?.let {
+                        Chip(text = it.name)
+                        Spacing.Horizontal.Tiny()
                     }
+
+                    // Rating
+                    Chip(
+                        text = details.rating,
+                        icon = R.drawable.ic_baseline_star_24
+                    )
                 }
-                Spacer(modifier = Modifier.padding(bottom = 24.dp))
+                Spacing.Vertical.Medium()
 
                 // Title
                 Text(details.title, fontSize = 24.sp, color = Color.White)
-                Spacer(modifier = Modifier.padding(bottom = 4.dp))
+                Spacing.Vertical.Tiny()
 
                 // Subtitle
                 if (details.tagline.isNotEmpty()) {
                     Text(details.tagline, fontSize = 18.sp, color = DarkerWhite)
-                    Spacer(modifier = Modifier.padding(bottom = 12.dp))
+                    Spacing.Vertical.Small()
                 }
 
                 // Description
                 Text(details.overview, color = DarkerWhite)
+                Spacing.Vertical.Small()
+
+                // Actors
+                ActorsList(actors = actors, onActorClicked = onActorClicked)
             }
         }
     }
 }
 
+@Composable
+fun ActorsList(actors: List<Actor>, onActorClicked: (Int) -> Unit) {
+    LazyRow {
+        items(count = actors.size, key = { actors[it].id }, itemContent = { index ->
+            actors[index].apply {
+                CastItem(
+                    id,
+                    name,
+                    profilePath.orEmpty().toSmallPosterURL(),
+                    character,
+                    onActorClicked
+                )
+                Spacing.Horizontal.Tiny()
+            }
+        })
+    }
+}
+
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
 @Composable
-fun previewMovieDetails() {
+fun PreviewMovieDetails() {
     val text = stringResource(id = R.string.placeholder_title)
     AppTheme {
-        movieDetails(
+        MovieDetails(
             MovieDetails(
                 title = text,
                 runtime = 100,
-                genres = listOf(MovieGenres(name = text), MovieGenres(name = text)),
-                vote_average = 8.5,
+                genres = listOf(
+                    MovieGenres(name = text),
+                    MovieGenres(name = text)
+                ),
+                voteAverage = 8.5,
                 tagline = text,
                 overview = stringResource(id = R.string.placeholder_description)
-            )
-        ) {}
+            ),
+            actors = listOf(
+                Actor(0, "Will Smith", character = "Robert Neville"),
+                Actor(1, "Alice Braga", character = "Anna"),
+                Actor(2, "Charlie Tahan", character = "Ethan"),
+            ),
+            {}, {}
+        )
     }
 }

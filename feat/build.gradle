@@ -1,10 +1,12 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id "io.gitlab.arturbosch.detekt"
 }
 
 apply from: "$rootDir/android.gradle"
+android {
+    namespace 'com.zhangzhu95.feat'
+}
 
 dependencies {
     api project(path: ':core')
