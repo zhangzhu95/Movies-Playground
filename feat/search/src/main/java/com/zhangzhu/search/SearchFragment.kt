@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Snackbar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,20 +17,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
 import com.zhangzhu95.core.ui.widgets.LoadingView
+import com.zhangzhu95.core.ui.widgets.MovieHistoryItem
 import com.zhangzhu95.core.ui.widgets.OnBottomReached
 import com.zhangzhu95.core.ui.widgets.ScreenInformation
 import com.zhangzhu95.core.ui.widgets.SearchBar
 import com.zhangzhu95.core.ui.widgets.Spacing
 import com.zhangzhu95.core.ui.widgets.VerticalMovieItem
 import com.zhangzhu95.core.ui.widgets.styles.AppTheme
+import com.zhangzhu95.data.fakes.fakeMoviesHistory
 import com.zhangzhu95.data.movies.models.Movie
+import com.zhangzhu95.data.movies.models.MovieHistory
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.TextStyle
 import javax.inject.Inject
 import com.zhangzhu95.core.R as RC
 
@@ -104,6 +111,14 @@ fun SearchScreen(
         when (viewState) {
             is SearchViewState.Empty -> Empty()
             is SearchViewState.Start -> Start()
+            is SearchViewState.RecentlyVisited -> {
+                Text(
+                    text = stringResource(id = R.string.recently_visited),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Spacing.Vertical.Tiny()
+                MoviesHistoryList(viewState.list, onMovieClicked)
+            }
             is SearchViewState.SearchList -> MoviesList(viewState.list, onMovieClicked, onLoadMore)
             else -> {}
         }
@@ -149,10 +164,36 @@ private fun MoviesList(movies: List<Movie>, onMovieClicked: (Int) -> Unit, onLoa
     }
 }
 
+@Composable
+private fun MoviesHistoryList(movies: List<MovieHistory>, onMovieClicked: (Int) -> Unit) {
+    LazyRow {
+        items(count = movies.size, key = { movies[it].id }, itemContent = { index ->
+            val movie = movies[index]
+            MovieHistoryItem(
+                id = movie.id,
+                postureUrl = movie.poster.toSmallPosterURL(),
+                onMovieClicked = onMovieClicked
+            )
+        })
+    }
+}
+
 @Preview
 @Composable
-private fun SearchScreenPreview() {
+private fun SearchScreenEmptyPreview() {
     AppTheme {
         SearchScreen("Hola", SearchViewState.Empty, SearchViewEvent.Idle, {}, {}, {}, {})
+    }
+}
+
+@Preview
+@Composable
+private fun SearchScreenRecentlyViewPreview() {
+    AppTheme {
+        SearchScreen(
+            "Hola",
+            SearchViewState.RecentlyVisited(
+                fakeMoviesHistory
+            ), SearchViewEvent.Idle, {}, {}, {}, {})
     }
 }

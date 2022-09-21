@@ -93,7 +93,6 @@ fun SearchBar(
             }
         }
     }
-
 }
 
 @Preview

@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$/feat/splash" />
             <option value="$PROJECT_DIR$/thirdparty" />
             <option value="$PROJECT_DIR$/thirdparty/retrofit" />
+            <option value="$PROJECT_DIR$/thirdparty/room" />
           </set>
         </option>
       </GradleProjectSettings>

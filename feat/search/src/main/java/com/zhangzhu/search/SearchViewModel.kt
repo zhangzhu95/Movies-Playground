@@ -3,8 +3,10 @@ package com.zhangzhu.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhangzhu95.core.networking.Response
+import com.zhangzhu95.domain.movies.GetMoviesInHistory
 import com.zhangzhu95.domain.movies.SearchMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,14 +15,29 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchMoviesUseCase: SearchMoviesUseCase
+    private val searchMoviesUseCase: SearchMoviesUseCase,
+    private val getMoviesInHistory: GetMoviesInHistory
 ) : ViewModel(), SearchPaginationActions {
 
     val viewState = MutableStateFlow<SearchViewState>(SearchViewState.Start)
     val events = MutableSharedFlow<SearchViewEvent>()
     var query = MutableStateFlow("")
+
     override var job: Job? = null
     private val pagination = SearchPagination(this)
+
+    init {
+        loadMoviesHistory()
+    }
+
+    private fun loadMoviesHistory() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val list = getMoviesInHistory()
+            if (list.isNotEmpty()) {
+                viewState.value = SearchViewState.RecentlyVisited(list)
+            }
+        }
+    }
 
     override fun loadMovies(page: Int) {
         job = viewModelScope.launch {
