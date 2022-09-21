@@ -2,7 +2,7 @@
 (Under Dev)
 
 Uses the following libraries:
-- [Native Splash Screen] (To Do)
+- [Native Splash Screen]
 - [Jetpack compose]
 - [ViewModel]
 - [Navigation component]

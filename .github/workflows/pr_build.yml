@@ -1,6 +1,6 @@
 name: Build and Test
 
-on: [ workflow_call ]
+on: [ pull_request ]
 
 jobs:
   build_test:
