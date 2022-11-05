@@ -18,7 +18,7 @@ jobs:
         run: ./gradlew detekt
 
       - name: Merge modules reports in one report
-          run:  ./gradlew detekt reportMerge
+        run:  ./gradlew detekt reportMerge
 
       # Make sure we always run this upload task,
       # because the previous step may fail if there are findings.
