@@ -34,12 +34,10 @@ internal class HomeViewModel @Inject constructor(
         handleMoviesSectionResponse(R.string.trending, response)
     }
 
-
     private fun loadTopRated() = viewModelScope.launch {
         val response = fetchTopRatedMoviesUseCase()
         handleMoviesSectionResponse(R.string.top_rated, response)
     }
-
 
     private fun loadUpcoming() = viewModelScope.launch {
         val response = fetchUpcomingMoviesUseCase()
@@ -47,7 +45,8 @@ internal class HomeViewModel @Inject constructor(
     }
 
     private fun handleMoviesSectionResponse(
-        @StringRes sectionTitle: Int, response: Response<MoviesListResponse>
+        @StringRes sectionTitle: Int,
+        response: Response<MoviesListResponse>
     ) {
         viewState.value = when (response) {
             is Response.Success -> getSectionsUpdatedState(

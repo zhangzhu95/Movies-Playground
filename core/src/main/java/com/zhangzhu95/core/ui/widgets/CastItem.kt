@@ -23,13 +23,14 @@ import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 
 @Composable
 fun CastItem(
+    modifier: Modifier = Modifier,
     id: Int = 0,
     name: String,
     posterUrl: String = "",
     character: String,
     onClick: (Int) -> Unit
 ) {
-    Column(Modifier.width(120.dp)) {
+    Column(modifier.width(120.dp)) {
         TextButton(onClick = { onClick(id) }) {
             RemoteImage(
                 url = posterUrl,

@@ -36,7 +36,8 @@ fun SearchBar(
     editable: Boolean = true,
     onTouch: (() -> Unit)? = null,
     onSearch: (() -> Unit)? = null,
-    focused: Boolean = false
+    focused: Boolean = false,
+    customSection: (@Composable () -> Unit)? = null
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -91,6 +92,8 @@ fun SearchBar(
                     Text(text = stringResource(id = hint), color = Color.Gray)
                 }
             }
+
+            customSection?.invoke()
         }
     }
 }

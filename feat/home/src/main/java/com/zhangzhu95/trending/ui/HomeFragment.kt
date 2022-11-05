@@ -37,6 +37,7 @@ import com.zhangzhu95.data.fakes.fakeMovies
 import com.zhangzhu95.data.movies.models.Movie
 import com.zhangzhu95.trending.R
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 import com.zhangzhu95.core.R as RC
 
@@ -53,13 +54,17 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return ComposeView(requireContext()).apply {
             // Dispose of the Composition when the view's LifecycleOwner
             // is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 AppTheme {
-                    val viewState by viewModel.viewState.collectAsState()
+                    val viewState by viewModel.viewState.filter {
+                    it is HomeViewState.Success
+                    }.collectAsState(HomeViewState.Idle)
+
                     HomeScreen(
                         viewState,
                         onMovieSelected = {

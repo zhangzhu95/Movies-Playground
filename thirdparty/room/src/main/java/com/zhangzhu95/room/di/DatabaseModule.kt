@@ -8,11 +8,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class MoviesDatabaseModule {
+class DatabaseModule {
 
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): MoviesDatabase {
@@ -23,5 +22,8 @@ class MoviesDatabaseModule {
     }
 
     @Provides
-    fun provideMoviesDatabaseDao(database: MoviesDatabase) = database.movieHistoryDao()
+    fun provideMoviesHistoryDao(database: MoviesDatabase) = database.movieHistoryDao()
+
+    @Provides
+    fun provideSearchQueryDao(database: MoviesDatabase) = database.searchQueryDao()
 }

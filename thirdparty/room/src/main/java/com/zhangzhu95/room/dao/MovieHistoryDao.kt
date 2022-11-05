@@ -11,11 +11,11 @@ import com.zhangzhu95.room.entities.MovieHistory
 interface MovieHistoryDao {
 
     @Query("SELECT * FROM moviehistory order by date_created desc")
-    fun getAll(): List<MovieHistory>
+    suspend fun getAll(): List<MovieHistory>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg movie: MovieHistory)
+    suspend fun insertAll(vararg movie: MovieHistory)
 
     @Delete
-    fun delete(movie: MovieHistory)
+    suspend fun delete(movie: MovieHistory)
 }

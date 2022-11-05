@@ -5,8 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.domain.movies.GetMoviesInHistory
 import com.zhangzhu95.domain.movies.SearchMoviesUseCase
+import com.zhangzhu95.domain.search.GetSearchQueriesUseCase
+import com.zhangzhu95.domain.search.SaveSearchQueryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchMoviesUseCase: SearchMoviesUseCase,
-    private val getMoviesInHistory: GetMoviesInHistory
+    private val getMoviesInHistory: GetMoviesInHistory,
+    private val saveSearchQueryUseCase: SaveSearchQueryUseCase,
+    private val getSearchQueriesUseCase: GetSearchQueriesUseCase
 ) : ViewModel(), SearchPaginationActions {
 
     val viewState = MutableStateFlow<SearchViewState>(SearchViewState.Start)
@@ -27,16 +30,7 @@ class SearchViewModel @Inject constructor(
     private val pagination = SearchPagination(this)
 
     init {
-        loadMoviesHistory()
-    }
-
-    private fun loadMoviesHistory() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val list = getMoviesInHistory()
-            if (list.isNotEmpty()) {
-                viewState.value = SearchViewState.RecentlyVisited(list)
-            }
-        }
+        loadSearchHistory()
     }
 
     override fun loadMovies(page: Int) {
@@ -61,8 +55,34 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    private fun loadSearchHistory() {
+        viewModelScope.launch {
+            val queriesHistory = getSearchQueriesUseCase()
+            val recentlyViewedHistory = getMoviesInHistory()
+
+            if (queriesHistory.isNotEmpty() || recentlyViewedHistory.isNotEmpty()) {
+                viewState.value = SearchViewState.AutocompleteHistory(
+                    recentlyViewedHistory, queriesHistory
+                )
+            }
+        }
+    }
+
+    private fun saveQueryLocally() {
+        viewModelScope.launch {
+            saveSearchQueryUseCase.invoke(query.value)
+        }
+    }
+
+    fun onMovieClicked(id: Int) {
+        viewModelScope.launch {
+            events.emit(SearchViewEvent.NavigationMovieDetails(id))
+        }
+    }
+
     fun onNewSearch() {
         pagination.newSearch()
+        saveQueryLocally()
     }
 
     fun onLoadMore() {
@@ -70,6 +90,10 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onSearchQueryChanged(newQuery: String) {
+        if (query.value == newQuery) {
+            return
+        }
+
         query.value = newQuery
     }
 }

@@ -48,7 +48,9 @@ android {
 
 detekt {
     // Defaults to the default detekt configuration.
+    config = files("$rootDir/config/detekt/detekt.yml")
     ignoreFailures = true
+    basePath = rootProject.projectDir.absolutePath
 }
 
 dependencies {

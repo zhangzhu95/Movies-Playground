@@ -179,11 +179,11 @@ fun ActorsList(actors: List<Actor>, onActorClicked: (Int) -> Unit) {
         items(count = actors.size, key = { actors[it].id }, itemContent = { index ->
             actors[index].apply {
                 CastItem(
-                    id,
-                    name,
-                    profilePath.orEmpty().toSmallPosterURL(),
-                    character,
-                    onActorClicked
+                    id = id,
+                    name = name,
+                    posterUrl = profilePath.orEmpty().toSmallPosterURL(),
+                    character = character,
+                    onClick = onActorClicked
                 )
                 Spacing.Horizontal.Tiny()
             }

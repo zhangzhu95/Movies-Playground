@@ -12,7 +12,11 @@ import com.zhangzhu95.core.R
 import com.zhangzhu95.core.ui.widgets.styles.Blackish
 
 @Composable
-fun FadedImage(modifier: Modifier, url: String, placeholderRes: Int = R.mipmap.movie_poster) {
+fun FadedImage(
+    modifier: Modifier = Modifier,
+    url: String,
+    placeholderRes: Int = R.mipmap.movie_poster
+) {
     RemoteImage(
         url = url,
         placeholderRes = placeholderRes,

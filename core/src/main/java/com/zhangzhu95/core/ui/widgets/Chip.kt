@@ -19,10 +19,13 @@ import com.zhangzhu95.core.ui.widgets.styles.DarkerWhite
 import com.zhangzhu95.core.ui.widgets.styles.LightBlackish
 
 @Composable
-fun Chip(text: String, @DrawableRes icon: Int? = null) {
-
+fun Chip(
+    modifier: Modifier = Modifier,
+    text: String,
+    @DrawableRes icon: Int? = null
+) {
     Row(
-        Modifier
+        modifier
             .background(LightBlackish, shape = RoundedCornerShape(5.dp))
             .padding(vertical = 5.dp, horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -46,5 +49,5 @@ fun Chip(text: String, @DrawableRes icon: Int? = null) {
 @Preview
 @Composable
 private fun ChipPreview() {
-    Chip(text = "Hola", R.drawable.ic_baseline_star_24)
+    Chip(text = "Hola", icon = R.drawable.ic_baseline_star_24)
 }
