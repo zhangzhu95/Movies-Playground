@@ -29,7 +29,6 @@ fun ScreenInformation(@StringRes message: Int, @DrawableRes icon: Int) {
         Spacing.Vertical.Small()
         Text(text = stringResource(id = message), color = Color.Gray, fontSize = 20.sp)
     }
-
 }
 
 @Preview

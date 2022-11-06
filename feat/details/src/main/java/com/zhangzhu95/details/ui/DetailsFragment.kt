@@ -193,7 +193,7 @@ fun ActorsList(actors: List<Actor>, onActorClicked: (Int) -> Unit) {
 
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
 @Composable
-fun PreviewMovieDetails() {
+private fun MovieDetailsPreview() {
     val text = stringResource(id = R.string.placeholder_title)
     AppTheme {
         MovieDetails(
