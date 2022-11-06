@@ -1,7 +1,7 @@
 import json
 import sys
 
-WORKSPACE = sys.argv[1]
+WORKSPACE = sys.argv[1] + "/"
 REPORT_FILE = 'build/reports/detekt/merge.sarif'
 
 print("- Workspace : " + WORKSPACE)
