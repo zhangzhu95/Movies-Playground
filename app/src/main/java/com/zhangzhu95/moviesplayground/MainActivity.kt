@@ -1,6 +1,6 @@
 package com.zhangzhu95.moviesplayground
 
-import android.os.*
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -12,12 +12,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-
-
         setContentView(R.layout.activity_main)
-        OnCrr();
-    }
-
-    fun OnCrr(){
     }
 }

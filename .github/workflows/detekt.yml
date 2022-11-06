@@ -26,7 +26,7 @@ jobs:
         run:  ./gradlew detekt reportMerge
 
       - name: Replace Detekt absolute paths with relative ones
-        run:  python ./config/detekt/fix_location.py  ${{ github.workspace }}
+        run:  python ./config/detekt/fix_location.py ${{ github.workspace }}
 
       # Make sure we always run this upload task,
       # because the previous step may fail if there are findings.

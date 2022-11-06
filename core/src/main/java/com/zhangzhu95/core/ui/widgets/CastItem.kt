@@ -54,9 +54,9 @@ fun CastItem(
     }
 }
 
-@Preview()
+@Preview
 @Composable
-fun CastItemPreview() {
+private fun CastItemPreview() {
     AppTheme {
         Surface {
             CastItem(name = "Morgan Freeman", character = "Jango") {}
