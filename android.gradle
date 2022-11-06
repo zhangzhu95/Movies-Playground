@@ -44,13 +44,17 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 detekt {
     // Defaults to the default detekt configuration.
     config = files("$rootDir/config/detekt/detekt.yml")
     ignoreFailures = true
-    basePath = rootProject.projectDir.absolutePath
+    basePath = rootProject.projectDir
 }
 
 dependencies {

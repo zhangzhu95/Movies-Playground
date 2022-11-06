@@ -25,6 +25,9 @@ jobs:
       - name: Merge modules reports in one report
         run:  ./gradlew detekt reportMerge
 
+      - name: Replace Detekt absolute paths with relative ones
+        run:  python .\config\detekt\fix_location.py  ${{ github.workspace }}
+
       # Make sure we always run this upload task,
       # because the previous step may fail if there are findings.
       - name: Upload SARIF to Github using the upload-sarif action
