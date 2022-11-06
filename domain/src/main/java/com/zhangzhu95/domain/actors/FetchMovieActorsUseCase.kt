@@ -1,8 +1,8 @@
 package com.zhangzhu95.domain.actors
 
+import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.data.actors.ActorsRepository
 import com.zhangzhu95.data.movies.models.CastResponse
-import com.zhangzhu95.core.networking.Response
 import javax.inject.Inject
 
 class FetchMovieActorsUseCase @Inject constructor(

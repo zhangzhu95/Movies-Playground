@@ -10,9 +10,9 @@ import coil.compose.AsyncImage
 
 @Composable
 fun RemoteImage(
+    modifier: Modifier = Modifier,
     url: String,
     placeholderRes: Int,
-    modifier: Modifier,
     contentScale: ContentScale? = null
 ) {
     if (LocalInspectionMode.current) {

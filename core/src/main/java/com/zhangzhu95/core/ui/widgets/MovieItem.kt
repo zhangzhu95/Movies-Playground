@@ -16,14 +16,15 @@ import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 
 @Composable
 fun MovieItem(
+    modifier: Modifier = Modifier,
     id: Int = 0,
-    postureUrl: String = "",
+    posterUrl: String = "",
     onMovieClicked: (Int) -> Unit,
 ) {
-    TextButton(onClick = { onMovieClicked(id) }) {
+    TextButton(modifier = modifier, onClick = { onMovieClicked(id) }) {
         RemoteImage(
-            url = postureUrl,
-            R.mipmap.movie_poster,
+            url = posterUrl,
+            placeholderRes = R.mipmap.movie_poster,
             modifier = Modifier
                 .wrapContentHeight()
                 .width(150.dp)

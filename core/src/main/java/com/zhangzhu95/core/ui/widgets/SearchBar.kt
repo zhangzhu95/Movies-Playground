@@ -30,6 +30,7 @@ import com.zhangzhu95.core.R
 
 @Composable
 fun SearchBar(
+    modifier: Modifier = Modifier,
     value: String = "",
     @StringRes hint: Int? = null,
     onValueChange: (String) -> Unit = {},
@@ -42,7 +43,7 @@ fun SearchBar(
     val focusRequester = remember { FocusRequester() }
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp)
             .clickable {

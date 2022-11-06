@@ -45,7 +45,7 @@ fun VerticalMovieItem(
                 Row(modifier = Modifier.padding(10.dp)) {
                     RemoteImage(
                         url = postureUrl,
-                        R.mipmap.movie_poster,
+                        placeholderRes = R.mipmap.movie_poster,
                         modifier = Modifier
                             .wrapContentHeight()
                             .width(120.dp)

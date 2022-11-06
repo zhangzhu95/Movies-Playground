@@ -34,7 +34,7 @@ fun CastItem(
         TextButton(onClick = { onClick(id) }) {
             RemoteImage(
                 url = posterUrl,
-                R.mipmap.movie_poster,
+                placeholderRes = R.mipmap.movie_poster,
                 modifier = Modifier
                     .wrapContentHeight()
                     .width(100.dp)

@@ -18,9 +18,13 @@ import androidx.compose.ui.unit.sp
 import com.zhangzhu95.core.R
 
 @Composable
-fun ScreenInformation(@StringRes message: Int, @DrawableRes icon: Int) {
+fun ScreenInformation(
+    modifier: Modifier = Modifier,
+    @StringRes message: Int,
+    @DrawableRes icon: Int
+) {
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(id = icon),
             contentDescription = "Icon",
@@ -34,5 +38,8 @@ fun ScreenInformation(@StringRes message: Int, @DrawableRes icon: Int) {
 @Preview
 @Composable
 private fun ScreenInformationPreview() {
-    ScreenInformation(message = R.string.placeholder_title, icon = R.drawable.ic_baseline_search_24)
+    ScreenInformation(
+        message = R.string.placeholder_title,
+        icon = R.drawable.ic_baseline_search_24
+    )
 }

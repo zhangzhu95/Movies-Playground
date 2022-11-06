@@ -129,7 +129,8 @@ fun SearchScreen() {
 private fun Empty() {
     Spacing.Vertical.Medium()
     ScreenInformation(
-        message = R.string.no_movies_found, icon = RC.drawable.ic_baseline_search_24
+        message = R.string.no_movies_found,
+        icon = RC.drawable.ic_baseline_search_24
     )
 }
 
@@ -137,7 +138,8 @@ private fun Empty() {
 private fun Start() {
     Spacing.Vertical.Medium()
     ScreenInformation(
-        message = R.string.start_movie_search, icon = R.drawable.ic_baseline_local_movies_24
+        message = R.string.start_movie_search,
+        icon = R.drawable.ic_baseline_local_movies_24
     )
 }
 
@@ -206,7 +208,8 @@ private fun SearchHistorySection(history: SearchViewState.AutocompleteHistory) {
                     postureUrl = movie.poster.toSmallPosterURL(),
                     onMovieClicked = viewModel::onMovieClicked
                 )
-            })
+            }
+        )
     }
 }
 

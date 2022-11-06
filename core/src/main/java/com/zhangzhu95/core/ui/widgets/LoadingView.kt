@@ -13,8 +13,8 @@ import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 
 @Suppress("FunctionNaming")
 @Composable
-fun LoadingView(text: String? = null) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+fun LoadingView(modifier: Modifier = Modifier, text: String? = null) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         CircularProgressIndicator(
             modifier = Modifier.padding(20.dp)
         )

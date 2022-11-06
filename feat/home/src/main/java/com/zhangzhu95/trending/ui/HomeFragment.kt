@@ -62,7 +62,7 @@ class HomeFragment : Fragment() {
             setContent {
                 AppTheme {
                     val viewState by viewModel.viewState.filter {
-                    it is HomeViewState.Success
+                        it is HomeViewState.Success
                     }.collectAsState(HomeViewState.Idle)
 
                     HomeScreen(
@@ -150,9 +150,9 @@ internal fun HomeSectionList(
             items(count = movies.size, key = { movies[it].id }, itemContent = { index ->
                 val movie = movies[index]
                 MovieItem(
-                    movie.id,
-                    movie.posterPath.toSmallPosterURL(),
-                    onMovieSelected
+                    id = movie.id,
+                    posterUrl = movie.posterPath.toSmallPosterURL(),
+                    onMovieClicked = onMovieSelected
                 )
             })
         }

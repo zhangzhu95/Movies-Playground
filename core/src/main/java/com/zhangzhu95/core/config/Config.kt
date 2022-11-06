@@ -12,7 +12,7 @@ object Config {
         "E3YzU4NjdkMDI3NmY2MiIsInN1YiI6IjYyZWU1N2VlODEzY2I2MDA5MjM5ZDgxYiIsInNjb3Blcy" +
         "I6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.1RFIxqkr2Cs77o6OhOGIGtT73obSRUQWv3UdyC0qIgA"
 
-    object Date{
+    object Date {
         const val SECONDS_IN_MINUTE = 60
         const val MINUTES_IN_HOUR = 60
     }

@@ -3,7 +3,7 @@ package com.zhangzhu95.room.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Calendar
+import java.util.*
 
 @Entity
 data class MovieHistory(

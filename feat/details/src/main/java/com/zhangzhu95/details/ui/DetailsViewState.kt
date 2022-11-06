@@ -10,5 +10,4 @@ sealed interface DetailsViewState : ViewState {
     object Idle : DetailsViewState
     data class Success(val details: MovieDetails, val actors: List<Actor>) : DetailsViewState
     data class Error(val error: String) : DetailsViewState
-    object InvalidMovieId : DetailsViewState
 }
