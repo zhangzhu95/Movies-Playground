@@ -30,21 +30,21 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.findNavController
+import com.zhangzhu95.compose.themes.AppTheme
+import com.zhangzhu95.compose.widgets.Chip
+import com.zhangzhu95.compose.widgets.LoadingView
+import com.zhangzhu95.compose.widgets.MovieHistoryItem
+import com.zhangzhu95.compose.widgets.OnBottomReached
+import com.zhangzhu95.compose.widgets.ScreenInformation
+import com.zhangzhu95.compose.widgets.SearchBar
+import com.zhangzhu95.compose.widgets.Spacing
+import com.zhangzhu95.compose.widgets.VerticalMovieItem
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
-import com.zhangzhu95.core.ui.widgets.Chip
-import com.zhangzhu95.core.ui.widgets.LoadingView
-import com.zhangzhu95.core.ui.widgets.MovieHistoryItem
-import com.zhangzhu95.core.ui.widgets.OnBottomReached
-import com.zhangzhu95.core.ui.widgets.ScreenInformation
-import com.zhangzhu95.core.ui.widgets.SearchBar
-import com.zhangzhu95.core.ui.widgets.Spacing
-import com.zhangzhu95.core.ui.widgets.VerticalMovieItem
-import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 import com.zhangzhu95.data.movies.models.Movie
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.zhangzhu95.core.R as RC
+import com.zhangzhu95.compose.R as RC
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {

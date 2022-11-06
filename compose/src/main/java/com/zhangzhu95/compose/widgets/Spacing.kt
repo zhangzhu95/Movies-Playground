@@ -1,4 +1,4 @@
-package com.zhangzhu95.core.ui.widgets
+package com.zhangzhu95.compose.widgets
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding

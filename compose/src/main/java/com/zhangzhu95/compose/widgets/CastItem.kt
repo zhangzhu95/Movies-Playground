@@ -1,4 +1,4 @@
-package com.zhangzhu95.core.ui.widgets
+package com.zhangzhu95.compose.widgets
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -18,8 +18,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zhangzhu95.core.R
-import com.zhangzhu95.core.ui.widgets.styles.AppTheme
+import com.zhangzhu95.compose.R
+import com.zhangzhu95.compose.themes.AppTheme
 
 @Composable
 fun CastItem(

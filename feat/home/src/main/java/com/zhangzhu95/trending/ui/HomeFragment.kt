@@ -27,19 +27,19 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.zhangzhu95.compose.themes.AppTheme
+import com.zhangzhu95.compose.widgets.LoadingView
+import com.zhangzhu95.compose.widgets.MovieItem
+import com.zhangzhu95.compose.widgets.SearchBar
+import com.zhangzhu95.compose.widgets.Spacing
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
-import com.zhangzhu95.core.ui.widgets.LoadingView
-import com.zhangzhu95.core.ui.widgets.MovieItem
-import com.zhangzhu95.core.ui.widgets.SearchBar
-import com.zhangzhu95.core.ui.widgets.Spacing
-import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 import com.zhangzhu95.data.fakes.fakeMovies
 import com.zhangzhu95.data.movies.models.Movie
 import com.zhangzhu95.trending.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
-import com.zhangzhu95.core.R as RC
+import com.zhangzhu95.compose.R as RC
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -90,7 +90,10 @@ internal fun HomeScreen(
 
         Spacing.Vertical.Tiny()
 
-        SearchBar(hint = RC.string.search_movie_hint, onTouch = onSearchClick)
+        SearchBar(
+            hint = RC.string.search_movie_hint,
+            onTouch = onSearchClick
+        )
 
         when (viewState) {
             is HomeViewState.Loading -> LoadingView()

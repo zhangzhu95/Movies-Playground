@@ -35,23 +35,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.zhangzhu95.core.R
+import com.zhangzhu95.compose.themes.AppTheme
+import com.zhangzhu95.compose.widgets.CastItem
+import com.zhangzhu95.compose.widgets.Chip
+import com.zhangzhu95.compose.widgets.FadedImage
+import com.zhangzhu95.compose.widgets.LoadingView
+import com.zhangzhu95.compose.widgets.Spacing
+import com.zhangzhu95.compose.widgets.styles.Blackish
+import com.zhangzhu95.compose.widgets.styles.DarkerWhite
 import com.zhangzhu95.core.helpers.extensions.toBigPosterURL
 import com.zhangzhu95.core.helpers.extensions.toDuration
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
-import com.zhangzhu95.core.ui.widgets.CastItem
-import com.zhangzhu95.core.ui.widgets.Chip
-import com.zhangzhu95.core.ui.widgets.FadedImage
-import com.zhangzhu95.core.ui.widgets.LoadingView
-import com.zhangzhu95.core.ui.widgets.Spacing
-import com.zhangzhu95.core.ui.widgets.styles.AppTheme
-import com.zhangzhu95.core.ui.widgets.styles.Blackish
-import com.zhangzhu95.core.ui.widgets.styles.DarkerWhite
 import com.zhangzhu95.data.movies.models.Actor
 import com.zhangzhu95.data.movies.models.MovieDetails
 import com.zhangzhu95.data.movies.models.MovieGenres
+import com.zhangzhu95.details.R
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.zhangzhu95.compose.R as RC
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -108,7 +109,6 @@ fun MovieDetails(
                 // Poster
                 FadedImage(
                     url = (details.backdropPath ?: details.posterPath).toBigPosterURL(),
-                    placeholderRes = R.mipmap.movie_poster,
                     modifier = Modifier.height(400.dp)
                 )
 
@@ -147,7 +147,7 @@ fun MovieDetails(
                     // Rating
                     Chip(
                         text = details.rating,
-                        icon = R.drawable.ic_baseline_star_24
+                        icon = RC.drawable.ic_baseline_star_24
                     )
                 }
                 Spacing.Vertical.Medium()
@@ -158,7 +158,11 @@ fun MovieDetails(
 
                 // Subtitle
                 if (details.tagline.isNotEmpty()) {
-                    Text(details.tagline, fontSize = 18.sp, color = DarkerWhite)
+                    Text(
+                        details.tagline,
+                        fontSize = 18.sp,
+                        color = DarkerWhite
+                    )
                     Spacing.Vertical.Small()
                 }
 
@@ -194,7 +198,7 @@ fun ActorsList(actors: List<Actor>, onActorClicked: (Int) -> Unit) {
 @Preview(showBackground = true, device = Devices.PIXEL_3A)
 @Composable
 private fun MovieDetailsPreview() {
-    val text = stringResource(id = R.string.placeholder_title)
+    val text = stringResource(id = RC.string.placeholder_title)
     AppTheme {
         MovieDetails(
             MovieDetails(
@@ -206,7 +210,7 @@ private fun MovieDetailsPreview() {
                 ),
                 voteAverage = 8.5,
                 tagline = text,
-                overview = stringResource(id = R.string.placeholder_description)
+                overview = stringResource(id = RC.string.placeholder_description)
             ),
             actors = listOf(
                 Actor(0, "Will Smith", character = "Robert Neville"),

@@ -1,4 +1,4 @@
-package com.zhangzhu95.core.ui.widgets.styles
+package com.zhangzhu95.compose.themes
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

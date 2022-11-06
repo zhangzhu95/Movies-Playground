@@ -1,4 +1,4 @@
-package com.zhangzhu95.core.ui.widgets
+package com.zhangzhu95.compose.widgets
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zhangzhu95.core.R
-import com.zhangzhu95.core.ui.widgets.styles.DarkerWhite
-import com.zhangzhu95.core.ui.widgets.styles.LightBlackish
+import com.zhangzhu95.compose.R
+import com.zhangzhu95.compose.widgets.styles.DarkerWhite
+import com.zhangzhu95.compose.widgets.styles.LightBlackish
 
 @Composable
 fun Chip(
@@ -49,5 +49,5 @@ fun Chip(
 @Preview
 @Composable
 private fun ChipPreview() {
-    Chip(text = "Hola", icon = R.drawable.ic_baseline_star_24)
+    Chip(text = "Hola", icon = R.drawable.ic_baseline_search_24)
 }

@@ -1,4 +1,4 @@
-package com.zhangzhu95.core.ui.widgets
+package com.zhangzhu95.compose.widgets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -8,8 +8,8 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import com.zhangzhu95.core.R
-import com.zhangzhu95.core.ui.widgets.styles.Blackish
+import com.zhangzhu95.compose.R
+import com.zhangzhu95.compose.widgets.styles.Blackish
 
 @Composable
 fun FadedImage(

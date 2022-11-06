@@ -1,4 +1,4 @@
-package com.zhangzhu95.core.ui.widgets
+package com.zhangzhu95.compose.widgets
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zhangzhu95.core.R
+import com.zhangzhu95.compose.R
 
 @Composable
 fun ScreenInformation(

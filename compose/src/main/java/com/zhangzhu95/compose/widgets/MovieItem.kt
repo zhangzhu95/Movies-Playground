@@ -1,4 +1,4 @@
-package com.zhangzhu95.core.ui.widgets
+package com.zhangzhu95.compose.widgets
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -9,36 +9,34 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zhangzhu95.core.R
-import com.zhangzhu95.core.ui.widgets.styles.AppTheme
+import com.zhangzhu95.compose.R
+import com.zhangzhu95.compose.themes.AppTheme
 
 @Composable
-fun MovieHistoryItem(
+fun MovieItem(
     modifier: Modifier = Modifier,
     id: Int = 0,
-    postureUrl: String = "",
+    posterUrl: String = "",
     onMovieClicked: (Int) -> Unit,
 ) {
     TextButton(modifier = modifier, onClick = { onMovieClicked(id) }) {
         RemoteImage(
-            url = postureUrl,
+            url = posterUrl,
             placeholderRes = R.mipmap.movie_poster,
             modifier = Modifier
-                .width(75.dp)
-                .height(100.dp)
+                .wrapContentHeight()
+                .width(150.dp)
+                .height(200.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .wrapContentHeight(),
-            contentScale = ContentScale.FillBounds
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun MovieHistoryItemPreview() {
+private fun MovieItemPreview() {
     AppTheme {
         Surface {
             MovieItem {}

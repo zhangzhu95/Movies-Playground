@@ -1,10 +1,14 @@
-package com.zhangzhu95.core.ui.widgets.styles
+package com.zhangzhu95.compose.themes
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import com.zhangzhu95.compose.widgets.styles.Purple200
+import com.zhangzhu95.compose.widgets.styles.Purple500
+import com.zhangzhu95.compose.widgets.styles.Purple700
+import com.zhangzhu95.compose.widgets.styles.Teal200
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,

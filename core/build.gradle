@@ -18,37 +18,15 @@ dependencies {
     // Misc
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
-    // Navigation Component --- Navigation Component --- Navigation Component
+    // Navigation Component
     def nav_version = "2.5.1"
     api "androidx.navigation:navigation-fragment-ktx:$nav_version"
     api "androidx.navigation:navigation-ui-ktx:$nav_version"
     api "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
     api "androidx.navigation:navigation-compose:$nav_version"
 
-    // Jetpack compose --- Jetpack compose --- Jetpack compose
-    api "androidx.compose.ui:ui:$compose_version"
-    api "androidx.compose.material:material:$compose_version"
-    api "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    api 'androidx.activity:activity-compose:1.5.1'
-    api 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
-    debugApi "androidx.compose.ui:ui-tooling:$compose_version"
-    debugApi "androidx.compose.ui:ui-test-manifest:$compose_version"
-    api "androidx.compose.foundation:foundation:$compose_version"
-    api "androidx.compose.material:material-icons-core:$compose_version"
-    api "androidx.compose.material:material-icons-extended:$compose_version"
-    api "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_version"
-    api "androidx.compose.runtime:runtime-livedata:$compose_version"
-    api "androidx.compose.runtime:runtime-rxjava2:$compose_version"
-    api "androidx.compose.material3:material3:1.0.0-alpha15"
-    api "androidx.compose.material3:material3-window-size-class:1.0.0-alpha15"
-    debugApi "androidx.customview:customview:1.2.0-alpha01"
-    debugApi "androidx.customview:customview-poolingcontainer:1.0.0"
+    // Timber
     api 'com.jakewharton.timber:timber:5.0.1'
-    api "com.google.accompanist:accompanist-pager:0.25.1"
-    api "androidx.compose.ui:ui-util:1.2.1"
-
-    // Coil --- Coil --- Coil --- Coil
-    api "io.coil-kt:coil-compose:2.0.0-rc01"
 
     // GSON
     api 'com.google.code.gson:gson:2.9.1'

@@ -1,4 +1,4 @@
-package com.zhangzhu95.core.ui.widgets.styles
+package com.zhangzhu95.compose.widgets.styles
 
 import androidx.compose.ui.graphics.Color
 
