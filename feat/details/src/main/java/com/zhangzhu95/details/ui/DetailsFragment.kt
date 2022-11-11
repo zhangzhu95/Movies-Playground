@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -32,17 +33,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.zhangzhu95.compose.themes.AppTheme
+import com.zhangzhu95.compose.themes.Blackish
+import com.zhangzhu95.compose.themes.DarkerWhite
 import com.zhangzhu95.compose.widgets.CastItem
 import com.zhangzhu95.compose.widgets.Chip
 import com.zhangzhu95.compose.widgets.FadedImage
 import com.zhangzhu95.compose.widgets.LoadingView
 import com.zhangzhu95.compose.widgets.Spacing
-import com.zhangzhu95.compose.widgets.styles.Blackish
-import com.zhangzhu95.compose.widgets.styles.DarkerWhite
 import com.zhangzhu95.core.helpers.extensions.toBigPosterURL
 import com.zhangzhu95.core.helpers.extensions.toDuration
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
@@ -153,15 +153,15 @@ fun MovieDetails(
                 Spacing.Vertical.Medium()
 
                 // Title
-                Text(details.title, fontSize = 24.sp, color = Color.White)
+                Text(details.title, style = MaterialTheme.typography.h3, color = Color.White)
                 Spacing.Vertical.Tiny()
 
                 // Subtitle
                 if (details.tagline.isNotEmpty()) {
                     Text(
                         details.tagline,
-                        fontSize = 18.sp,
-                        color = DarkerWhite
+                        color = DarkerWhite,
+                        style = MaterialTheme.typography.subtitle2
                     )
                     Spacing.Vertical.Small()
                 }

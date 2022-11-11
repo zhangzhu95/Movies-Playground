@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -56,8 +57,7 @@ fun VerticalMovieItem(
                     Column(modifier = Modifier.padding(start = 10.dp)) {
                         Text(
                             title,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp,
+                            style = MaterialTheme.typography.h5
                         )
 
                         Row(modifier = Modifier.padding(top = 20.dp)) {
@@ -70,8 +70,7 @@ fun VerticalMovieItem(
                             Text(
                                 rating.toString(),
                                 color = Color(0xFFD29B05),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp
+                                style = MaterialTheme.typography.subtitle1
                             )
                         }
 

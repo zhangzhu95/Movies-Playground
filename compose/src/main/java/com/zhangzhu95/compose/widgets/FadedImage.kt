@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import com.zhangzhu95.compose.R
-import com.zhangzhu95.compose.widgets.styles.Blackish
+import com.zhangzhu95.compose.themes.Blackish
 
 @Composable
 fun FadedImage(

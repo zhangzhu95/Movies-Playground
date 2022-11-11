@@ -10,12 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Snackbar
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -28,7 +27,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.findNavController
 import com.zhangzhu95.compose.themes.AppTheme
 import com.zhangzhu95.compose.widgets.Chip
@@ -40,6 +38,7 @@ import com.zhangzhu95.compose.widgets.SearchBar
 import com.zhangzhu95.compose.widgets.Spacing
 import com.zhangzhu95.compose.widgets.VerticalMovieItem
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
+import com.zhangzhu95.data.fakes.fakeMovies
 import com.zhangzhu95.data.movies.models.Movie
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -63,7 +62,17 @@ class SearchFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 AppTheme {
-                    SearchScreen()
+                    SearchScreen(
+                        query = viewModel.query.collectAsState().value,
+                        viewState = viewModel.viewState.collectAsState().value,
+                        event = viewModel.events.collectAsState(initial = SearchViewEvent.Idle).value,
+                        onValueChange = viewModel::onSearchQueryChanged,
+                        onSearch = viewModel::onNewSearch,
+                        onMovieClicked = viewModel::onMovieClicked,
+                        onLoadMore = viewModel::onLoadMore,
+                        onSearchQueryChanged = viewModel::onSearchQueryChanged,
+                        onNewSearch = viewModel::onNewSearch
+                    )
                 }
             }
         }
@@ -90,20 +99,25 @@ class SearchFragment : Fragment() {
 }
 
 @Composable
-fun SearchScreen() {
-    val viewModel: SearchViewModel = viewModel()
-    val query by viewModel.query.collectAsState()
-    val viewState = viewModel.viewState.collectAsState().value
-    val event by viewModel.events.collectAsState(initial = SearchViewEvent.Idle)
-
+fun SearchScreen(
+    query: String = "",
+    viewState: SearchViewState = SearchViewState.Idle,
+    event: SearchViewEvent = SearchViewEvent.Idle,
+    onValueChange: (String) -> Unit = {},
+    onSearch: () -> Unit = {},
+    onMovieClicked: (Int) -> Unit = {},
+    onLoadMore: () -> Unit = {},
+    onSearchQueryChanged: (String) -> Unit = {},
+    onNewSearch: () -> Unit = {},
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacing.Vertical.Tiny()
 
         SearchBar(
             hint = RC.string.search_movie_hint,
             value = query,
-            onValueChange = viewModel::onSearchQueryChanged,
-            onSearch = viewModel::onNewSearch,
+            onValueChange = onValueChange,
+            onSearch = onSearch,
             focused = true
         )
 
@@ -117,9 +131,9 @@ fun SearchScreen() {
             is SearchViewState.Empty -> Empty()
             is SearchViewState.Start -> Start()
             is SearchViewState.AutocompleteHistory -> {
-                SearchHistorySection(viewState)
+                SearchHistorySection(viewState, onSearchQueryChanged, onNewSearch, onMovieClicked)
             }
-            is SearchViewState.SearchList -> MoviesList(viewState.list)
+            is SearchViewState.SearchList -> MoviesList(viewState.list, onMovieClicked, onLoadMore)
             else -> {}
         }
     }
@@ -144,8 +158,11 @@ private fun Start() {
 }
 
 @Composable
-private fun MoviesList(movies: List<Movie>) {
-    val viewModel: SearchViewModel = viewModel()
+private fun MoviesList(
+    movies: List<Movie>,
+    onMovieClicked: (Int) -> Unit = {},
+    onLoadMore: () -> Unit = {}
+) {
     val listState = rememberLazyListState()
 
     LazyColumn(state = listState) {
@@ -157,23 +174,29 @@ private fun MoviesList(movies: List<Movie>) {
                 id = movie.id,
                 postureUrl = movie.posterPath.toSmallPosterURL(),
                 rating = movie.voteAverage,
-                onMovieClicked = viewModel::onMovieClicked
+                onMovieClicked = onMovieClicked
             )
         })
     }
 
-    listState.OnBottomReached(viewModel::onLoadMore)
+    listState.OnBottomReached(onLoadMore)
 }
 
 @Composable
-private fun SearchHistorySection(history: SearchViewState.AutocompleteHistory) {
-    val viewModel: SearchViewModel = viewModel()
+private fun SearchHistorySection(
+    history: SearchViewState.AutocompleteHistory,
+    onSearchQueryChanged: (String) -> Unit = {},
+    onNewSearch: () -> Unit = {},
+    onMovieClicked: (Int) -> Unit = {}
+) {
 
     Text(
         text = stringResource(id = R.string.previous_searches),
-        style = MaterialTheme.typography.titleLarge
+        style = MaterialTheme.typography.h3
     )
+
     Spacing.Vertical.Tiny()
+
     LazyRow {
         items(count = history.queryHistory.size, key = { history.queryHistory[it] }) {
             val query = history.queryHistory[it]
@@ -183,8 +206,8 @@ private fun SearchHistorySection(history: SearchViewState.AutocompleteHistory) {
                 modifier = Modifier
                     .padding(4.dp)
                     .clickable {
-                        viewModel.onSearchQueryChanged(query)
-                        viewModel.onNewSearch()
+                        onSearchQueryChanged(query)
+                        onNewSearch()
                     }
             )
         }
@@ -194,9 +217,11 @@ private fun SearchHistorySection(history: SearchViewState.AutocompleteHistory) {
 
     Text(
         text = stringResource(id = R.string.recently_visited),
-        style = MaterialTheme.typography.titleLarge
+        style = MaterialTheme.typography.h3
     )
+
     Spacing.Vertical.Tiny()
+
     LazyRow {
         items(
             count = history.recentlyViewed.size,
@@ -206,7 +231,7 @@ private fun SearchHistorySection(history: SearchViewState.AutocompleteHistory) {
                 MovieHistoryItem(
                     id = movie.id,
                     postureUrl = movie.poster.toSmallPosterURL(),
-                    onMovieClicked = viewModel::onMovieClicked
+                    onMovieClicked = onMovieClicked
                 )
             }
         )
@@ -217,6 +242,10 @@ private fun SearchHistorySection(history: SearchViewState.AutocompleteHistory) {
 @Composable
 private fun SearchScreenRecentlyViewPreview() {
     AppTheme {
-        SearchScreen()
+        SearchScreen(
+            viewState = SearchViewState.SearchList(
+                list = fakeMovies
+            )
+        )
     }
 }

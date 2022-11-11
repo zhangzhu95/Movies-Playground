@@ -15,8 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhangzhu95.compose.R
-import com.zhangzhu95.compose.widgets.styles.DarkerWhite
-import com.zhangzhu95.compose.widgets.styles.LightBlackish
+import com.zhangzhu95.compose.themes.DarkerWhite
+import com.zhangzhu95.compose.themes.LightBlackish
 
 @Composable
 fun Chip(

@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,7 +32,11 @@ fun ScreenInformation(
             Modifier.size(100.dp)
         )
         Spacing.Vertical.Small()
-        Text(text = stringResource(id = message), color = Color.Gray, fontSize = 20.sp)
+        Text(
+            text = stringResource(id = message),
+            color = Color.Gray,
+            style = MaterialTheme.typography.h5
+        )
     }
 }
 
