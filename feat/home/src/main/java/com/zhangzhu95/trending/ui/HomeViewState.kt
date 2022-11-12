@@ -10,6 +10,10 @@ internal sealed interface HomeViewState : ViewState {
     data class Error(val message: String) : HomeViewState
 }
 
-internal sealed class HomeSections constructor(val sectionTitle: Int) {
-    data class HorizontalMoviesSection(val title: Int, val list: List<Movie>) : HomeSections(title)
+internal sealed class HomeSections {
+    sealed class HorizontalMoviesSection(open var list: List<Movie>) : HomeSections(){
+        data class TrendingMoviesSection(override var list: List<Movie>): HorizontalMoviesSection(list)
+        data class TopRatedMoviesSection(override var list: List<Movie>): HorizontalMoviesSection(list)
+        data class UpcomingMoviesSection(override var list: List<Movie>): HorizontalMoviesSection(list)
+    }
 }

@@ -98,9 +98,14 @@ internal fun HomeScreen(
             is HomeViewState.Loading -> LoadingView()
             is HomeViewState.Success -> {
                 LazyColumn(contentPadding = PaddingValues(vertical = 10.dp)) {
-                    items(count = viewState.list.size, key = { viewState.list[it].sectionTitle }) {
+                    items(count = viewState.list.size, key = { it }) {
+                        val sectionTitle = when (viewState.list[it]) {
+                            is HomeSections.HorizontalMoviesSection.TopRatedMoviesSection -> R.string.top_rated
+                            is HomeSections.HorizontalMoviesSection.UpcomingMoviesSection -> R.string.upcoming
+                            is HomeSections.HorizontalMoviesSection.TrendingMoviesSection -> R.string.trending
+                        }
                         RenderHomeSection(
-                            title = viewState.list[it].sectionTitle,
+                            title = sectionTitle,
                             section = viewState.list[it],
                             onMovieSelected = onMovieSelected
                         )
@@ -166,8 +171,9 @@ private fun HomePreview() {
 
     val currentState = HomeViewState.Success(
         listOf(
-            HomeSections.HorizontalMoviesSection(title = R.string.trending, list = fakeMovies),
-            HomeSections.HorizontalMoviesSection(title = R.string.top_rated, list = fakeMovies),
+            HomeSections.HorizontalMoviesSection.TopRatedMoviesSection(list = fakeMovies),
+            HomeSections.HorizontalMoviesSection.UpcomingMoviesSection(list = fakeMovies),
+            HomeSections.HorizontalMoviesSection.TrendingMoviesSection(list = fakeMovies)
         )
     )
 

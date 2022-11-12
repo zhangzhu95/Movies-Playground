@@ -10,6 +10,7 @@ android {
 }
 
 dependencies {
+    testImplementation project(path: ':testing')
     implementation project(path: ':compose')
     implementation project(path: ':feat')
     implementation project(path: ':data')

@@ -1,6 +1,7 @@
 package com.zhangzhu95.trending.ui
 
 import androidx.annotation.StringRes
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhangzhu95.core.networking.Response
@@ -29,30 +30,34 @@ internal class HomeViewModel @Inject constructor(
         loadUpcoming()
     }
 
-    private fun loadTrending() = viewModelScope.launch {
+    @VisibleForTesting
+    fun loadTrending() = viewModelScope.launch {
         val response = fetchTrendingViewState()
-        handleMoviesSectionResponse(R.string.trending, response)
-    }
-
-    private fun loadTopRated() = viewModelScope.launch {
-        val response = fetchTopRatedMoviesUseCase()
-        handleMoviesSectionResponse(R.string.top_rated, response)
-    }
-
-    private fun loadUpcoming() = viewModelScope.launch {
-        val response = fetchUpcomingMoviesUseCase()
-        handleMoviesSectionResponse(R.string.upcoming, response)
-    }
-
-    private fun handleMoviesSectionResponse(
-        @StringRes sectionTitle: Int,
-        response: Response<MoviesListResponse>
-    ) {
         viewState.value = when (response) {
             is Response.Success -> getSectionsUpdatedState(
-                HomeSections.HorizontalMoviesSection(
-                    sectionTitle, response.data?.results.orEmpty()
-                )
+                HomeSections.HorizontalMoviesSection.TrendingMoviesSection(response.data?.results.orEmpty())
+            )
+            is Response.Error -> HomeViewState.Error(response.message)
+        }
+    }
+
+    @VisibleForTesting
+    fun loadTopRated() = viewModelScope.launch {
+        val response = fetchTopRatedMoviesUseCase()
+        viewState.value = when (response) {
+            is Response.Success -> getSectionsUpdatedState(
+                HomeSections.HorizontalMoviesSection.TopRatedMoviesSection(response.data?.results.orEmpty())
+            )
+            is Response.Error -> HomeViewState.Error(response.message)
+        }
+    }
+
+    @VisibleForTesting
+    fun loadUpcoming() = viewModelScope.launch {
+        val response = fetchUpcomingMoviesUseCase()
+        viewState.value = when (response) {
+            is Response.Success -> getSectionsUpdatedState(
+                HomeSections.HorizontalMoviesSection.UpcomingMoviesSection(response.data?.results.orEmpty())
             )
             is Response.Error -> HomeViewState.Error(response.message)
         }

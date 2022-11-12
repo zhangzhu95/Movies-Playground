@@ -1,0 +1,24 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: "$rootDir/android.gradle"
+android {
+    namespace 'com.zhangzhu95.testing'
+}
+
+dependencies {
+    api project(path: ':core')
+    api project(path: ':data')
+
+    def nav_version = "2.5.1"
+    def mockk_version = "1.13.2"
+    api 'junit:junit:4.13.2'
+    api 'androidx.test.ext:junit:1.1.3'
+    api 'androidx.test.espresso:espresso-core:3.4.0'
+    api "androidx.navigation:navigation-testing:$nav_version"
+    api "androidx.compose.ui:ui-test-junit4:$compose_version"
+    api "io.mockk:mockk:${mockk_version}"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-test:+"
+}

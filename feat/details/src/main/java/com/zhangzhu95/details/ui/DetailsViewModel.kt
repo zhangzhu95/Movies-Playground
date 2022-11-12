@@ -1,5 +1,6 @@
 package com.zhangzhu95.details.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,13 +27,16 @@ internal class DetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val viewState = MutableStateFlow<DetailsViewState>(DetailsViewState.Idle)
-    private val movieId = savedStateHandle.get<String>("movieId")
+
+    @VisibleForTesting
+    val movieId = savedStateHandle.get<String>("movieId")
 
     init {
         loadDetails()
     }
 
-    private fun loadDetails() = viewModelScope.launch(Dispatchers.IO) {
+    @VisibleForTesting
+    fun loadDetails() = viewModelScope.launch(Dispatchers.IO) {
         if (movieId.isNullOrEmpty()) {
             return@launch
         }
