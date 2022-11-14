@@ -7,6 +7,7 @@ Uses the following libraries:
 - [ViewModel]
 - [Navigation component]
 - [Coroutines]
+- [Room]
 - [Multi-modules] + [Dynamic features] (To Do)
 - [Tests] (Unit and UI) (To Do)
 - [Github actions]
@@ -23,3 +24,4 @@ Uses the following libraries:
 [Tests]: <https://developer.android.com/training/testing/fundamentals>
 [Github actions]: <https://github.com/features/actions>
 [Detekt]: <https://github.com/detekt/detekt>
+[Room]: <https://developer.android.com/training/data-storage/room>

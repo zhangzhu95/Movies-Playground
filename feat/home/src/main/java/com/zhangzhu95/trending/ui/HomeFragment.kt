@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,25 +21,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.zhangzhu95.compose.themes.AppTheme
+import com.zhangzhu95.compose.widgets.LoadingView
+import com.zhangzhu95.compose.widgets.MovieItem
+import com.zhangzhu95.compose.widgets.SearchBar
+import com.zhangzhu95.compose.widgets.Spacing
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
-import com.zhangzhu95.core.ui.widgets.LoadingView
-import com.zhangzhu95.core.ui.widgets.MovieItem
-import com.zhangzhu95.core.ui.widgets.SearchBar
-import com.zhangzhu95.core.ui.widgets.Spacing
-import com.zhangzhu95.core.ui.widgets.styles.AppTheme
 import com.zhangzhu95.data.fakes.fakeMovies
 import com.zhangzhu95.data.movies.models.Movie
 import com.zhangzhu95.trending.R
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
-import com.zhangzhu95.core.R as RC
+import com.zhangzhu95.compose.R as RC
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -53,13 +53,17 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return ComposeView(requireContext()).apply {
             // Dispose of the Composition when the view's LifecycleOwner
             // is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 AppTheme {
-                    val viewState by viewModel.viewState.collectAsState()
+                    val viewState by viewModel.viewState.filter {
+                        it is HomeViewState.Success
+                    }.collectAsState(HomeViewState.Idle)
+
                     HomeScreen(
                         viewState,
                         onMovieSelected = {
@@ -85,15 +89,23 @@ internal fun HomeScreen(
 
         Spacing.Vertical.Tiny()
 
-        SearchBar(hint = RC.string.search_movie_hint, onTouch = onSearchClick)
+        SearchBar(
+            hint = RC.string.search_movie_hint,
+            onTouch = onSearchClick
+        )
 
         when (viewState) {
             is HomeViewState.Loading -> LoadingView()
             is HomeViewState.Success -> {
                 LazyColumn(contentPadding = PaddingValues(vertical = 10.dp)) {
-                    items(count = viewState.list.size, key = { viewState.list[it].sectionTitle }) {
+                    items(count = viewState.list.size, key = { it }) {
+                        val sectionTitle = when (viewState.list[it]) {
+                            is HomeSections.HorizontalMoviesSection.TopRatedMoviesSection -> R.string.top_rated
+                            is HomeSections.HorizontalMoviesSection.UpcomingMoviesSection -> R.string.upcoming
+                            is HomeSections.HorizontalMoviesSection.TrendingMoviesSection -> R.string.trending
+                        }
                         RenderHomeSection(
-                            title = viewState.list[it].sectionTitle,
+                            title = sectionTitle,
                             section = viewState.list[it],
                             onMovieSelected = onMovieSelected
                         )
@@ -133,8 +145,7 @@ internal fun HomeSectionList(
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
             text = stringResource(id = title),
-            fontSize = 28.sp,
-            fontWeight = FontWeight.ExtraBold
+            style = MaterialTheme.typography.h3
         )
 
         LazyRow(
@@ -145,9 +156,9 @@ internal fun HomeSectionList(
             items(count = movies.size, key = { movies[it].id }, itemContent = { index ->
                 val movie = movies[index]
                 MovieItem(
-                    movie.id,
-                    movie.posterPath.toSmallPosterURL(),
-                    onMovieSelected
+                    id = movie.id,
+                    posterUrl = movie.posterPath.toSmallPosterURL(),
+                    onMovieClicked = onMovieSelected
                 )
             })
         }
@@ -160,8 +171,9 @@ private fun HomePreview() {
 
     val currentState = HomeViewState.Success(
         listOf(
-            HomeSections.HorizontalMoviesSection(title = R.string.trending, list = fakeMovies),
-            HomeSections.HorizontalMoviesSection(title = R.string.top_rated, list = fakeMovies),
+            HomeSections.HorizontalMoviesSection.TopRatedMoviesSection(list = fakeMovies),
+            HomeSections.HorizontalMoviesSection.UpcomingMoviesSection(list = fakeMovies),
+            HomeSections.HorizontalMoviesSection.TrendingMoviesSection(list = fakeMovies)
         )
     )
 

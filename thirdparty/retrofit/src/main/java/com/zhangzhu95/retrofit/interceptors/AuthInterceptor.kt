@@ -7,8 +7,10 @@ import okhttp3.Response
 class AuthInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer ${Config.API_ACCESS_TOKEN}").build()
+        val request = chain.request()
+            .newBuilder()
+            .addHeader("Authorization", "Bearer ${Config.API_ACCESS_TOKEN}")
+            .build()
         return chain.proceed(request)
     }
 }

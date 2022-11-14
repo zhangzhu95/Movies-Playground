@@ -44,19 +44,19 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 detekt {
     // Defaults to the default detekt configuration.
+    config = files("$rootDir/config/detekt/detekt.yml")
     ignoreFailures = true
+    basePath = rootProject.projectDir
 }
 
 dependencies {
-
-    def nav_version = "2.5.1"
-    testApi 'junit:junit:4.13.2'
-    androidTestApi 'androidx.test.ext:junit:1.1.3'
-    androidTestApi 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestApi "androidx.navigation:navigation-testing:$nav_version"
-    androidTestApi "androidx.compose.ui:ui-test-junit4:$compose_version"
+    // Shared dependencies
 }
