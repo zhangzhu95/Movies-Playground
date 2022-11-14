@@ -95,7 +95,6 @@ class DetailsViewModelTest {
         assertEquals(movieId, sut.movieId)
         coVerify(exactly = 1) {
             fetchDetailsUseCase.invoke(movieId)
-            fetchMovieActorsUseCase.invoke(movieId)
         }
 
         coVerify(exactly = 0) {
