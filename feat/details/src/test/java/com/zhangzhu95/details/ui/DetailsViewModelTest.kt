@@ -16,7 +16,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -52,7 +52,7 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `test successful loadDetails`() = runTest {
+    fun `test successful loadDetails`() = runBlocking {
         initSUT()
         assertEquals(movieId, sut.movieId)
         coVerify(exactly = 1) {
@@ -77,7 +77,7 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `test missing id`() = runTest {
+    fun `test missing id`() = runBlocking {
         every { savedStateHandle.get<String>("movieId") } returns null
         initSUT()
         coVerify(exactly = 0) {
@@ -89,11 +89,11 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `test failed fetching movie details`() = runTest {
+    fun `test failed fetching movie details`() = runBlocking {
         mockFailedFetchDetails()
         initSUT()
         assertEquals(movieId, sut.movieId)
-        coVerify(exactly = 1) {
+        coVerify {
             fetchDetailsUseCase.invoke(movieId)
         }
 
@@ -106,11 +106,11 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `test failed fetching cast`() = runTest {
+    fun `test failed fetching cast`() = runBlocking {
         mockFailedFetchMovieActors()
         initSUT()
         assertEquals(movieId, sut.movieId)
-        coVerify(exactly = 1) {
+        coVerify {
             fetchDetailsUseCase.invoke(movieId)
             fetchMovieActorsUseCase.invoke(movieId)
             FakeMovieDetails.regularDetails.apply {
