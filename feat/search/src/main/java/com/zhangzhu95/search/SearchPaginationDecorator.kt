@@ -1,27 +1,30 @@
-package com.zhangzhu.search
+package com.zhangzhu95.search
 
 import com.zhangzhu95.data.movies.models.Movie
 import kotlinx.coroutines.Job
 
-class SearchPagination(private val actions: SearchPaginationActions) {
+internal class SearchPagination(private val actions: SearchPaginationActions) {
 
     private var currentPage = 1
     private var stopLoadingMore = false
     private var isFirstSearch = true
 
-    fun newSearch() {
+    internal fun newSearch() {
         reset()
         actions.loadMovies(currentPage)
     }
 
-    fun loadMore() {
+    internal fun loadMore() {
         if (actions.job?.isCompleted != false && !stopLoadingMore) {
             isFirstSearch = false
             actions.loadMovies(currentPage + 1)
         }
     }
 
-    fun getSuccessState(previousViewState: SearchViewState, list: List<Movie>): SearchViewState? {
+    internal fun getSuccessState(
+        previousViewState: SearchViewState,
+        list: List<Movie>
+    ): SearchViewState? {
         return if (isFirstSearch) {
             // Successful first search
             if (list.isNotEmpty()) {

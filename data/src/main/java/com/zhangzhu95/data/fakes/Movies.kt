@@ -3,11 +3,17 @@ package com.zhangzhu95.data.fakes
 import com.zhangzhu95.data.movies.models.Movie
 import com.zhangzhu95.data.movies.models.MovieHistory
 
-val fakeMovies = listOf(
-    Movie(id = 1, title = "Movie 1"),
-    Movie(id = 2, title = "Movie 2"),
-    Movie(id = 3, title = "Movie 3"),
-)
+val fakeMovies = (1..10).map {
+    Movie(id = it, title = "Movie $it")
+}
+
+val fakeMovies2 = (20..30).map {
+    Movie(id = it, title = "Movie $it")
+}
+
+val fakeMovies3 = (40..50).map {
+    Movie(id = it, title = "Movie $it")
+}
 
 val fakeMoviesHistory = listOf(
     MovieHistory(id = 0, "", "Movie 1"),

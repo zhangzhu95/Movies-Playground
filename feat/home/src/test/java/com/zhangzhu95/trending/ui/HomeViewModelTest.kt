@@ -2,76 +2,85 @@ package com.zhangzhu95.trending.ui
 
 import com.zhangzhu95.core.networking.Response
 import com.zhangzhu95.data.fakes.fakeMovies
-import com.zhangzhu95.data.movies.models.MoviesListResponse
-import com.zhangzhu95.domain.movies.FetchTopRatedMoviesUseCase
-import com.zhangzhu95.domain.movies.FetchTrendingUseCase
-import com.zhangzhu95.domain.movies.FetchUpcomingMoviesUseCase
+import com.zhangzhu95.data.fakes.fakeMovies2
+import com.zhangzhu95.data.fakes.fakeMovies3
+import com.zhangzhu95.domain.movies.FetchHomeSectionsUseCase
+import com.zhangzhu95.domain.movies.models.HomeSections
 import com.zhangzhu95.testing.MainDispatcherRule
-import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
-import kotlinx.coroutines.test.runTest
-import org.junit.Before
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
 class HomeViewModelTest {
 
-    private val fetchTrendingViewState: FetchTrendingUseCase = mockk()
-    private val fetchTopRatedMoviesUseCase: FetchTopRatedMoviesUseCase = mockk()
-    private val fetchUpcomingMoviesUseCase: FetchUpcomingMoviesUseCase = mockk()
+    private val fetchHomeSectionsUseCase: FetchHomeSectionsUseCase = mockk()
     private lateinit var sut: HomeViewModel
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    @Before
-    fun setup() {
-        mockSuccessfulFetchTopRatedMovies()
-        mockSuccessfulTrendingMovies()
-        mockSuccessfulUpcomingMovies()
-
-        sut = HomeViewModel(
-            fetchTrendingViewState,
-            fetchTopRatedMoviesUseCase,
-            fetchUpcomingMoviesUseCase
-        )
-    }
-
     @Test
-    fun `test data loaded successfully after init`() = runTest {
-        val expected = HomeViewState.Success(
-            list = listOf(
-                HomeSections.HorizontalMoviesSection.TrendingMoviesSection(fakeMovies),
-                HomeSections.HorizontalMoviesSection.TopRatedMoviesSection(fakeMovies),
-                HomeSections.HorizontalMoviesSection.UpcomingMoviesSection(fakeMovies),
+    fun `test successful data fetch after init`() = runBlocking {
+        every {
+            fetchHomeSectionsUseCase.invoke()
+        } returns flow {
+            emit(
+                Response.Success(
+                    data = HomeSections(
+                        trending = fakeMovies,
+                        upcoming = fakeMovies2,
+                        topRated = fakeMovies3
+                    )
+                )
+            )
+        }
+
+        sut = HomeViewModel(fetchHomeSectionsUseCase)
+
+        val expected = HomeViewState.Sections(
+            HomeSections(
+                trending = fakeMovies,
+                upcoming = fakeMovies2,
+                topRated = fakeMovies3
             )
         )
 
         assertEquals(expected, sut.viewState.value)
     }
 
-    private fun mockSuccessfulFetchTopRatedMovies() {
-        coEvery {
-            fetchTopRatedMoviesUseCase.invoke()
-        }.returns(
-            Response.Success(data = MoviesListResponse(page = 1, results = fakeMovies))
-        )
+    @Test
+    fun `test unsuccessful data fetch after init`() = runBlocking {
+        every {
+            fetchHomeSectionsUseCase.invoke()
+        } returns flow {
+            emit(
+                Response.Error("Error message")
+            )
+        }
+
+        sut = HomeViewModel(fetchHomeSectionsUseCase)
+
+        val expected = HomeViewState.Error("Error message")
+
+        assertEquals(expected, sut.viewState.value)
     }
 
-    private fun mockSuccessfulTrendingMovies() {
-        coEvery {
-            fetchTrendingViewState.invoke()
-        }.returns(
-            Response.Success(data = MoviesListResponse(page = 1, results = fakeMovies))
-        )
-    }
+    @Test
+    fun `test loading state after init`() = runBlocking {
+        every {
+            fetchHomeSectionsUseCase.invoke()
+        } returns flow {
+            emit(Response.Loading)
+        }
 
-    private fun mockSuccessfulUpcomingMovies() {
-        coEvery {
-            fetchUpcomingMoviesUseCase.invoke()
-        }.returns(
-            Response.Success(data = MoviesListResponse(page = 1, results = fakeMovies))
-        )
+        sut = HomeViewModel(fetchHomeSectionsUseCase)
+
+        val expected = HomeViewState.Loading
+
+        assertEquals(expected, sut.viewState.value)
     }
 }

@@ -1,8 +1,8 @@
 package com.zhangzhu95.moviesplayground.di.navigation
 
 import androidx.navigation.NavController
-import com.zhangzhu.search.SearchFragmentDirections
-import com.zhangzhu.search.SearchNavigation
+import com.zhangzhu95.search.SearchFragmentDirections
+import com.zhangzhu95.search.SearchNavigation
 
 object SearchNavigationImpl : SearchNavigation {
 

@@ -1,4 +1,4 @@
-package com.zhangzhu.search
+package com.zhangzhu95.search
 
 sealed interface SearchViewEvent {
     object Idle : SearchViewEvent

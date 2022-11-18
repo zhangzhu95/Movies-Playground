@@ -1,4 +1,4 @@
-package com.zhangzhu.search
+package com.zhangzhu95.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -41,7 +41,6 @@ import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
 import com.zhangzhu95.data.fakes.fakeMovies
 import com.zhangzhu95.data.movies.models.Movie
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.zhangzhu95.compose.R as RC
 
@@ -81,19 +80,16 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Listen to one flow in a lifecycle-aware manner using flowWithLifecycle
-        lifecycleScope.launch {
-            viewModel.events
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                .collect {
-                    when (it) {
-                        is SearchViewEvent.NavigationMovieDetails -> navigation.goToMovieDetails(
-                            findNavController(),
-                            it.toString()
-                        )
-                        else -> {}
-                    }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.events.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect {
+                when (it) {
+                    is SearchViewEvent.NavigationMovieDetails -> navigation.goToMovieDetails(
+                        findNavController(),
+                        it.id.toString()
+                    )
+                    else -> {}
                 }
+            }
         }
     }
 }

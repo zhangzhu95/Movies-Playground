@@ -6,7 +6,7 @@ plugins {
 apply from: "$rootDir/android.gradle"
 apply from: "$rootDir/android-hilt.gradle"
 android {
-    namespace 'com.zhangzhu.search'
+    namespace 'com.zhangzhu95.search'
 }
 
 dependencies {

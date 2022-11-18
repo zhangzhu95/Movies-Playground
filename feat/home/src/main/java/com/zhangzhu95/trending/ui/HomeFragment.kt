@@ -34,9 +34,9 @@ import com.zhangzhu95.compose.widgets.Spacing
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
 import com.zhangzhu95.data.fakes.fakeMovies
 import com.zhangzhu95.data.movies.models.Movie
+import com.zhangzhu95.domain.movies.models.HomeSections
 import com.zhangzhu95.trending.R
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 import com.zhangzhu95.compose.R as RC
 
@@ -60,9 +60,7 @@ class HomeFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 AppTheme {
-                    val viewState by viewModel.viewState.filter {
-                        it is HomeViewState.Success
-                    }.collectAsState(HomeViewState.Idle)
+                    val viewState by viewModel.viewState.collectAsState(HomeViewState.Idle)
 
                     HomeScreen(
                         viewState,
@@ -96,17 +94,31 @@ internal fun HomeScreen(
 
         when (viewState) {
             is HomeViewState.Loading -> LoadingView()
-            is HomeViewState.Success -> {
-                LazyColumn(contentPadding = PaddingValues(vertical = 10.dp)) {
-                    items(count = viewState.list.size, key = { it }) {
-                        val sectionTitle = when (viewState.list[it]) {
-                            is HomeSections.HorizontalMoviesSection.TopRatedMoviesSection -> R.string.top_rated
-                            is HomeSections.HorizontalMoviesSection.UpcomingMoviesSection -> R.string.upcoming
-                            is HomeSections.HorizontalMoviesSection.TrendingMoviesSection -> R.string.trending
-                        }
-                        RenderHomeSection(
-                            title = sectionTitle,
-                            section = viewState.list[it],
+            is HomeViewState.Sections -> {
+
+                LazyColumn {
+                    item {
+                        HomeSectionList(
+                            title = R.string.top_rated,
+                            movies = viewState.sections.topRated,
+                            onMovieSelected = onMovieSelected
+                        )
+                        Spacing.Vertical.Medium()
+                    }
+
+                    item {
+                        HomeSectionList(
+                            title = R.string.upcoming,
+                            movies = viewState.sections.upcoming,
+                            onMovieSelected = onMovieSelected
+                        )
+                        Spacing.Vertical.Medium()
+                    }
+
+                    item {
+                        HomeSectionList(
+                            title = R.string.trending,
+                            movies = viewState.sections.trending,
                             onMovieSelected = onMovieSelected
                         )
                         Spacing.Vertical.Medium()
@@ -115,21 +127,6 @@ internal fun HomeScreen(
             }
             else -> {}
         }
-    }
-}
-
-@Composable
-internal fun RenderHomeSection(
-    @StringRes title: Int,
-    section: HomeSections,
-    onMovieSelected: (Int) -> Unit
-) {
-    when (section) {
-        is HomeSections.HorizontalMoviesSection -> HomeSectionList(
-            title = title,
-            movies = section.list,
-            onMovieSelected
-        )
     }
 }
 
@@ -169,11 +166,11 @@ internal fun HomeSectionList(
 @Composable
 private fun HomePreview() {
 
-    val currentState = HomeViewState.Success(
-        listOf(
-            HomeSections.HorizontalMoviesSection.TopRatedMoviesSection(list = fakeMovies),
-            HomeSections.HorizontalMoviesSection.UpcomingMoviesSection(list = fakeMovies),
-            HomeSections.HorizontalMoviesSection.TrendingMoviesSection(list = fakeMovies)
+    val currentState = HomeViewState.Sections(
+        sections = HomeSections(
+            trending = fakeMovies,
+            upcoming = fakeMovies,
+            topRated = fakeMovies
         )
     )
 

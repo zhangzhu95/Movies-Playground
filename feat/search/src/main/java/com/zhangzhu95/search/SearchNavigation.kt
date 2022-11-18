@@ -1,4 +1,4 @@
-package com.zhangzhu.search
+package com.zhangzhu95.search
 
 import androidx.navigation.NavController
 
