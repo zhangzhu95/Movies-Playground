@@ -9,7 +9,6 @@ import com.zhangzhu95.domain.movies.models.HomeSections
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -22,7 +21,8 @@ internal class HomeViewModel @Inject constructor(
     val viewState: StateFlow<HomeViewState> = fetchHomeSectionsUseCase.invoke()
         .map {
             it.toViewState()
-        }.stateIn(
+        }
+        .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
             HomeViewState.Loading
