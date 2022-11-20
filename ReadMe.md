@@ -9,7 +9,7 @@ Uses the following libraries:
 - [Coroutines]
 - [Room]
 - [Multi-modules] + [Dynamic features] (To Do)
-- [Tests] (Unit and UI) (To Do)
+- [Tests] (Unit) (UI Tests - To Do)
 - [Github actions]
 - [Detekt]
 
