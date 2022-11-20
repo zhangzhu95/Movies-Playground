@@ -4,54 +4,68 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zhangzhu95.core.helpers.extensions.doOnSuccess
 import com.zhangzhu95.core.networking.Response
+import com.zhangzhu95.data.movies.models.CastResponse
+import com.zhangzhu95.data.movies.models.MovieDetails
 import com.zhangzhu95.data.movies.models.MovieHistory
-import com.zhangzhu95.domain.movies.FetchMovieDetailsUseCase
+import com.zhangzhu95.domain.actors.FetchMovieActorsUseCase
+import com.zhangzhu95.domain.movies.FetchDetailsUseCase
 import com.zhangzhu95.domain.movies.SaveMovieInHistoryUseCase
-import com.zhangzhu95.domain.movies.models.MovieFullDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class DetailsViewModel @Inject constructor(
-    fetchMovieDetailsUseCase: FetchMovieDetailsUseCase,
+    private val fetchDetailsUseCase: FetchDetailsUseCase,
+    private val fetchMovieActorsUseCase: FetchMovieActorsUseCase,
     private val saveMovieInHistoryUseCase: SaveMovieInHistoryUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val viewState: StateFlow<DetailsViewState> = fetchMovieDetailsUseCase.invoke(
-        savedStateHandle["movieId"]
-    ).doOnSuccess(this::saveMovieInHistory).map {
-        it.toViewState()
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly,
-        DetailsViewState.Loading
-    )
+    val viewState = MutableStateFlow<DetailsViewState>(DetailsViewState.Idle)
 
     @VisibleForTesting
-    suspend fun saveMovieInHistory(response: Response.Success<MovieFullDetails>) {
-        val movie = response.data!!.details
-        saveMovieInHistoryUseCase.invoke(
-            MovieHistory(id = movie.id, name = movie.originalTitle, poster = movie.posterPath)
-        )
+    val movieId = savedStateHandle.get<String>("movieId")
+
+    init {
+        loadDetails()
     }
 
     @VisibleForTesting
-    fun Response<MovieFullDetails>.toViewState() = when (this) {
-        is Response.Success -> {
-            val response = this.data!!
-            DetailsViewState.Success(
-                details = response.details,
-                actors = response.cast?.cast ?: emptyList()
-            )
+    fun loadDetails() = viewModelScope.launch(Dispatchers.IO) {
+        if (movieId.isNullOrEmpty()) {
+            return@launch
         }
-        is Response.Error -> DetailsViewState.Error(this.message)
-        is Response.Loading -> DetailsViewState.Loading
+
+        viewState.value = DetailsViewState.Loading
+
+        val detailsCall = async { fetchDetailsUseCase(movieId) }
+        val actorsCall = async { fetchMovieActorsUseCase(movieId) }
+
+        val detailsResponse = detailsCall.await()
+        val actorsResponse = actorsCall.await()
+
+        when (detailsResponse) {
+            is Response.Success -> handleSuccessResponse(detailsResponse, actorsResponse)
+            is Response.Error -> viewState.value = DetailsViewState.Error(detailsResponse.message)
+        }
+    }
+
+    private suspend fun handleSuccessResponse(
+        detailsResponse: Response.Success<MovieDetails>,
+        actorsResponse: Response<CastResponse>
+    ) {
+        val movie = detailsResponse.data!!
+        val actors = (actorsResponse as? Response.Success)?.data?.cast ?: emptyList()
+
+        viewState.value = DetailsViewState.Success(movie, actors)
+
+        saveMovieInHistoryUseCase.invoke(
+            MovieHistory(id = movie.id, name = movie.originalTitle, poster = movie.posterPath)
+        )
     }
 }
