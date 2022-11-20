@@ -11,9 +11,9 @@ class FetchMovieDetailsUseCase @Inject constructor(
     private val moviesRepository: MoviesRepository,
     private val actorsRepository: ActorsRepository
 ) {
-    operator fun invoke(id: String?) = flow<Response<MovieFullDetails>> {
-        id?.let {
-            val details = moviesRepository.fetchDetails(id)
+    operator fun invoke(id: String?) = flow {
+        if (id.orEmpty().isNotEmpty()) {
+            val details = moviesRepository.fetchDetails(id!!)
             emit(Response.Loading)
 
             when (details) {
@@ -31,6 +31,8 @@ class FetchMovieDetailsUseCase @Inject constructor(
                 }
                 else -> emit(Response.Error(message = "Failed to load the screen"))
             }
+        } else {
+            emit(Response.Error("Error"))
         }
     }
 }

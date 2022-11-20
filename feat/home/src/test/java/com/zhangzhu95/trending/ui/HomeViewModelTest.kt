@@ -1,9 +1,9 @@
 package com.zhangzhu95.trending.ui
 
 import com.zhangzhu95.core.networking.Response
-import com.zhangzhu95.data.fakes.fakeMovies
-import com.zhangzhu95.data.fakes.fakeMovies2
-import com.zhangzhu95.data.fakes.fakeMovies3
+import com.zhangzhu95.data.fakes.FakeMovies.fakeMovies1
+import com.zhangzhu95.data.fakes.FakeMovies.fakeMovies2
+import com.zhangzhu95.data.fakes.FakeMovies.fakeMovies3
 import com.zhangzhu95.domain.movies.FetchHomeSectionsUseCase
 import com.zhangzhu95.domain.movies.models.HomeSections
 import com.zhangzhu95.testing.MainDispatcherRule
@@ -31,7 +31,7 @@ class HomeViewModelTest {
             emit(
                 Response.Success(
                     data = HomeSections(
-                        trending = fakeMovies,
+                        trending = fakeMovies1,
                         upcoming = fakeMovies2,
                         topRated = fakeMovies3
                     )
@@ -43,7 +43,7 @@ class HomeViewModelTest {
 
         val expected = HomeViewState.Sections(
             HomeSections(
-                trending = fakeMovies,
+                trending = fakeMovies1,
                 upcoming = fakeMovies2,
                 topRated = fakeMovies3
             )

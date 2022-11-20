@@ -7,9 +7,9 @@ import com.zhangzhu95.domain.movies.FetchMovieDetailsUseCase
 import com.zhangzhu95.domain.movies.SaveMovieInHistoryUseCase
 import com.zhangzhu95.domain.movies.models.MovieFullDetails
 import com.zhangzhu95.testing.MainDispatcherRule
-import com.zhangzhu95.testing.fake.FakeActor
-import com.zhangzhu95.testing.fake.FakeCastResponse
-import com.zhangzhu95.testing.fake.FakeMovieDetails
+import com.zhangzhu95.data.fakes.FakeActor
+import com.zhangzhu95.data.fakes.FakeCastResponse
+import com.zhangzhu95.data.fakes.FakeMovieDetails
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk

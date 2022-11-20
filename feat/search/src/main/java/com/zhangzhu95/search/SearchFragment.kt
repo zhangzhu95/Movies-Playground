@@ -38,7 +38,7 @@ import com.zhangzhu95.compose.widgets.SearchBar
 import com.zhangzhu95.compose.widgets.Spacing
 import com.zhangzhu95.compose.widgets.VerticalMovieItem
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
-import com.zhangzhu95.data.fakes.fakeMovies
+import com.zhangzhu95.data.fakes.FakeMovies.fakeMovies1
 import com.zhangzhu95.data.movies.models.Movie
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -240,7 +240,7 @@ private fun SearchScreenRecentlyViewPreview() {
     AppTheme {
         SearchScreen(
             viewState = SearchViewState.SearchList(
-                list = fakeMovies
+                list = fakeMovies1
             )
         )
     }

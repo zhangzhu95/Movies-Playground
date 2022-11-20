@@ -1,4 +1,4 @@
-package com.zhangzhu95.testing.fake
+package com.zhangzhu95.data.fakes
 
 import com.zhangzhu95.data.movies.models.Actor
 

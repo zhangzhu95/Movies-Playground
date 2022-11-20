@@ -32,7 +32,7 @@ import com.zhangzhu95.compose.widgets.MovieItem
 import com.zhangzhu95.compose.widgets.SearchBar
 import com.zhangzhu95.compose.widgets.Spacing
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
-import com.zhangzhu95.data.fakes.fakeMovies
+import com.zhangzhu95.data.fakes.FakeMovies.fakeMovies1
 import com.zhangzhu95.data.movies.models.Movie
 import com.zhangzhu95.domain.movies.models.HomeSections
 import com.zhangzhu95.trending.R
@@ -168,9 +168,9 @@ private fun HomePreview() {
 
     val currentState = HomeViewState.Sections(
         sections = HomeSections(
-            trending = fakeMovies,
-            upcoming = fakeMovies,
-            topRated = fakeMovies
+            trending = fakeMovies1,
+            upcoming = fakeMovies1,
+            topRated = fakeMovies1
         )
     )
 
