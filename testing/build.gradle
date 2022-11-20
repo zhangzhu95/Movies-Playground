@@ -11,6 +11,7 @@ android {
 dependencies {
     api project(path: ':core')
     api project(path: ':data')
+    implementation project(path: ':domain')
 
     def nav_version = "2.5.1"
     def mockk_version = "1.13.2"

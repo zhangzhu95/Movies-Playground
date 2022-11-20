@@ -10,5 +10,6 @@ android {
 }
 
 dependencies {
+    testImplementation project(path: ':testing')
     api project(path: ':data')
 }
