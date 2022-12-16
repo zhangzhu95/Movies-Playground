@@ -6,11 +6,6 @@ jobs:
   build_test:
     runs-on: ubuntu-latest
     steps:
-
-      - shell: bash
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
       - uses: actions/checkout@v3
 
       - name: set up JDK 11
@@ -31,6 +26,10 @@ jobs:
 
       - name: Generate Jacoco coverage reports
         run: ./gradlew jacocoTestReport
+
+      - name: Set Codecov token
+          env: # Or as an environment variable
+            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Sending Covergage Reports to Codecov
         run: |
