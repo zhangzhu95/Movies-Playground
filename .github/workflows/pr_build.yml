@@ -31,6 +31,6 @@ jobs:
         env: # Or as an environment variable
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov \
-          chmod +x codecov \
+          curl -Os https://uploader.codecov.io/latest/linux/codecov 
+          chmod +x codecov 
           ./codecov
