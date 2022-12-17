@@ -23,3 +23,14 @@ jobs:
 
       - name: Test
         run:  ./gradlew testDebugUnitTest
+
+      - name: Generate Jacoco coverage reports
+        run: ./gradlew jacocoTestReport
+
+      - name: Sending Covergage Reports to Codecov
+        env: # Or as an environment variable
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: |
+          curl -Os https://uploader.codecov.io/latest/linux/codecov 
+          chmod +x codecov 
+          ./codecov

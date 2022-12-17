@@ -1,5 +1,6 @@
 apply plugin: 'kotlin-kapt'
 apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: 'com.dicedmelon.gradle.jacoco-android'
 
 android {
 
@@ -59,4 +60,57 @@ detekt {
 
 dependencies {
     // Shared dependencies
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled true
+    excludes += [ 'android/databinding/**/*.class',
+                  '**/android/databinding/*Binding.class',
+                  '**/android/databinding/*',
+                  '**/androidx/databinding/*',
+                  '**/BR.*',
+                  '**/R.class',
+                  '**/R$*.class',
+                  '**/*$$*',
+                  '**/BuildConfig.*',
+                  '**/*$Lambda$*.*', // Jacoco can not handle several "$" in class name.
+                  '**/*Dagger*.*',
+                  '**/*MembersInjector*.*',
+                  '**/*_Provide*Factory*.*',
+                  '**/*_Factory*.*',
+                  '**/*$inlined$*.*', // Kotlin specific, Jacoco can not handle several "$" in class name.
+                  '**/dagger',
+                  '**/*Hilt*.*',
+                  '**/hilt_aggregated_deps',
+                  '**/*Module.*',
+                  '**/*Module$*.*',
+                  '**/com/bumptech',
+                  '**/*FragmentDirections*',
+                  '**/*FragmentArgs*',
+                  '**/*Fragment.*',
+                  '**/*Fragment$*.*',
+                  '**/*Dialog.*',
+                  '**/*Dialog$*.*',
+                  '**/*Activity.*',
+                  '**/*Activity$*.*',
+                  '**/*ViewHolder.*',
+                  '**/*ViewHolder$*.*',
+                  '**/*View.*',
+                  '**/*View$*.*',
+                  '**/*Adapter.*',
+                  '**/*Adapter$*.*',
+                  '**/*Screen*',
+                  '**/*Screen$*',]
+}
+
+tasks.withType(Test) {
+    // Whether or not classes without source location should be instrumented
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
 }
