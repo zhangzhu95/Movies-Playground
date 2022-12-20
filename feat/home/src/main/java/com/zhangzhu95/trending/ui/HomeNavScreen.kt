@@ -1,9 +1,5 @@
 package com.zhangzhu95.trending.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,14 +14,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.zhangzhu95.compose.themes.AppTheme
 import com.zhangzhu95.compose.widgets.LoadingView
 import com.zhangzhu95.compose.widgets.MovieItem
@@ -36,45 +28,21 @@ import com.zhangzhu95.data.fakes.FakeMovies.fakeMovies1
 import com.zhangzhu95.data.movies.models.Movie
 import com.zhangzhu95.domain.movies.models.HomeSections
 import com.zhangzhu95.trending.R
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import com.zhangzhu95.compose.R as RC
 
-@AndroidEntryPoint
-class HomeFragment : Fragment() {
+@Composable
+fun HomeNavScreen(
+    onMovieSelected: (Int) -> Unit,
+    onSearchClick: () -> Unit
+) {
+    val viewModel = hiltViewModel<HomeViewModel>()
+    val viewState by viewModel.viewState.collectAsState(HomeViewState.Idle)
 
-    @Inject
-    lateinit var navigation: HomeNavigation
-
-    private val viewModel: HomeViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            // Dispose of the Composition when the view's LifecycleOwner
-            // is destroyed
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                AppTheme {
-                    val viewState by viewModel.viewState.collectAsState(HomeViewState.Idle)
-
-                    HomeScreen(
-                        viewState,
-                        onMovieSelected = {
-                            navigation.goToMovieDetails(
-                                findNavController(),
-                                movieId = it.toString()
-                            )
-                        }, onSearchClick = { navigation.goToSearch(findNavController()) }
-                    )
-                }
-            }
-        }
-    }
+    HomeScreen(
+        viewState,
+        onMovieSelected = onMovieSelected,
+        onSearchClick = onSearchClick
+    )
 }
 
 @Composable

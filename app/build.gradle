@@ -14,6 +14,7 @@ dependencies {
     implementation project(path: ':thirdparty:retrofit')
     implementation project(path: ':thirdparty:room')
     implementation project(path: ':core')
+    implementation project(path: ':compose')
     implementation project(path: ':feat:splash')
     implementation project(path: ':feat:home')
     implementation project(path: ':feat:details')

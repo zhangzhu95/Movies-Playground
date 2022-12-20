@@ -12,7 +12,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,13 +44,11 @@ fun CastItem(
             style = MaterialTheme.typography.h6,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            color = Color.White
         )
 
         Text(
             character,
             style = MaterialTheme.typography.body2,
-            color = Color.Gray
         )
     }
 }

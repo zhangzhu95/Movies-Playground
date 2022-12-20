@@ -1,9 +1,7 @@
 package com.zhangzhu95.search
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -12,22 +10,17 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Snackbar
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.zhangzhu95.compose.themes.AppTheme
 import com.zhangzhu95.compose.widgets.Chip
 import com.zhangzhu95.compose.widgets.LoadingView
@@ -38,60 +31,39 @@ import com.zhangzhu95.compose.widgets.SearchBar
 import com.zhangzhu95.compose.widgets.Spacing
 import com.zhangzhu95.compose.widgets.VerticalMovieItem
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
-import com.zhangzhu95.data.fakes.FakeMovies.fakeMovies1
+import com.zhangzhu95.data.fakes.FakeMovies
+import com.zhangzhu95.data.fakes.FakeQueries
 import com.zhangzhu95.data.movies.models.Movie
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import com.zhangzhu95.compose.R as RC
 
-@AndroidEntryPoint
-class SearchFragment : Fragment() {
-
-    private val viewModel: SearchViewModel by viewModels()
-
-    @Inject
-    lateinit var navigation: SearchNavigation
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                AppTheme {
-                    SearchScreen(
-                        query = viewModel.query.collectAsState().value,
-                        viewState = viewModel.viewState.collectAsState().value,
-                        event = viewModel.events.collectAsState(initial = SearchViewEvent.Idle).value,
-                        onValueChange = viewModel::onSearchQueryChanged,
-                        onSearch = viewModel::onNewSearch,
-                        onMovieClicked = viewModel::onMovieClicked,
-                        onLoadMore = viewModel::onLoadMore,
-                        onSearchQueryChanged = viewModel::onSearchQueryChanged,
-                        onNewSearch = viewModel::onNewSearch
-                    )
-                }
-            }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.events.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect {
+@Composable
+fun SearchNavScreen(
+    onMovieClicked: (Int) -> Unit
+) {
+    val viewModel = hiltViewModel<SearchViewModel>()
+    LaunchedEffect(Unit) {
+        viewModel.events
+            .collect {
                 when (it) {
-                    is SearchViewEvent.NavigationMovieDetails -> navigation.goToMovieDetails(
-                        findNavController(),
-                        it.id.toString()
-                    )
+                    is SearchViewEvent.NavigationMovieDetails -> {
+                        onMovieClicked(it.id)
+                    }
                     else -> {}
                 }
             }
-        }
     }
+
+    SearchScreen(
+        query = viewModel.query.collectAsState().value,
+        viewState = viewModel.viewState.collectAsState().value,
+        event = viewModel.events.collectAsState(initial = SearchViewEvent.Idle).value,
+        onValueChange = viewModel::onSearchQueryChanged,
+        onSearch = viewModel::onNewSearch,
+        onMovieClicked = viewModel::onMovieClicked,
+        onLoadMore = viewModel::onLoadMore,
+        onSearchQueryChanged = viewModel::onSearchQueryChanged,
+        onNewSearch = viewModel::onNewSearch
+    )
 }
 
 @Composable
@@ -239,8 +211,9 @@ private fun SearchHistorySection(
 private fun SearchScreenRecentlyViewPreview() {
     AppTheme {
         SearchScreen(
-            viewState = SearchViewState.SearchList(
-                list = fakeMovies1
+            viewState = SearchViewState.AutocompleteHistory(
+                queryHistory = FakeQueries.fakeQueriesList,
+                recentlyViewed = FakeMovies.fakeMoviesHistory
             )
         )
     }
