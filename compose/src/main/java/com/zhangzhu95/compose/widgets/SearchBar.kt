@@ -1,8 +1,10 @@
 package com.zhangzhu95.compose.widgets
 
+import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,12 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhangzhu95.compose.R
+import com.zhangzhu95.compose.themes.AppTheme
 
 @Composable
 fun SearchBar(
@@ -38,8 +43,10 @@ fun SearchBar(
     onTouch: (() -> Unit)? = null,
     onSearch: (() -> Unit)? = null,
     focused: Boolean = false,
-    customSection: (@Composable () -> Unit)? = null
+    customSection: (@Composable () -> Unit)? = null,
+    darkTheme: Boolean = isSystemInDarkTheme()
 ) {
+    val textColor = remember { if (darkTheme) Color.LightGray else Color.DarkGray }
     val focusRequester = remember { FocusRequester() }
 
     Card(
@@ -72,6 +79,10 @@ fun SearchBar(
             Box {
                 // Display the text field
                 BasicTextField(
+                    textStyle = TextStyle(
+                        color = textColor
+                    ),
+                    cursorBrush = SolidColor(textColor),
                     value = value,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = { onSearch?.invoke() }),
@@ -100,13 +111,18 @@ fun SearchBar(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SearchBarPreview() {
-    SearchBar(value = "Value")
+    AppTheme {
+        SearchBar(value = "Value")
+    }
 }
 
 @Preview
 @Composable
 private fun SearchBarWithHintPreview() {
-    SearchBar(hint = R.string.placeholder_title)
+    AppTheme {
+        SearchBar(hint = R.string.placeholder_title)
+    }
 }
