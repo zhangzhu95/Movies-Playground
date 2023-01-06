@@ -1,11 +1,7 @@
 package com.zhangzhu95.details.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,69 +20,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.zhangzhu95.compose.themes.AppTheme
-import com.zhangzhu95.compose.themes.Blackish
-import com.zhangzhu95.compose.themes.DarkerWhite
 import com.zhangzhu95.compose.widgets.CastItem
 import com.zhangzhu95.compose.widgets.Chip
 import com.zhangzhu95.compose.widgets.FadedImage
 import com.zhangzhu95.compose.widgets.LoadingView
 import com.zhangzhu95.compose.widgets.Spacing
+import com.zhangzhu95.core.helpers.extensions.openWebPage
 import com.zhangzhu95.core.helpers.extensions.toBigPosterURL
 import com.zhangzhu95.core.helpers.extensions.toDuration
 import com.zhangzhu95.core.helpers.extensions.toSmallPosterURL
+import com.zhangzhu95.data.fakes.FakeActor
+import com.zhangzhu95.data.fakes.FakeMovieDetails
 import com.zhangzhu95.data.movies.models.Actor
 import com.zhangzhu95.data.movies.models.MovieDetails
-import com.zhangzhu95.data.movies.models.MovieGenres
 import com.zhangzhu95.details.R
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import com.zhangzhu95.compose.R as RC
 
-@AndroidEntryPoint
-class DetailsFragment : Fragment() {
-
-    @Inject
-    lateinit var navigation: DetailsNavigation
-
-    private val viewModel: DetailsViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            // Dispose of the Composition when the view's LifecycleOwner
-            // is destroyed
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                AppTheme {
-                    val state =
-                        viewModel.viewState.collectAsState(initial = DetailsViewState.Loading).value
-                    when (state) {
-                        is DetailsViewState.Loading -> LoadingView()
-                        is DetailsViewState.Success -> {
-                            MovieDetails(state.details, state.actors, {}) {
-                                navigation.discoverMovie(requireContext(), state.details.homepage)
-                            }
-                        }
-                        else -> Text(text = "State not handled")
-                    }
-                }
-            }
+@Composable
+fun DetailsNavScreen() {
+    val viewModel = hiltViewModel<DetailsViewModel>()
+    val state = viewModel.viewState.collectAsState(initial = DetailsViewState.Loading).value
+    when (state) {
+        is DetailsViewState.Loading -> LoadingView(modifier = Modifier.fillMaxWidth())
+        is DetailsViewState.Success -> {
+            MovieDetails(
+                state.details,
+                state.actors
+            )
         }
+        else -> Text(text = "State not handled")
     }
 }
 
@@ -94,14 +64,12 @@ class DetailsFragment : Fragment() {
 fun MovieDetails(
     details: MovieDetails,
     actors: List<Actor>,
-    onActorClicked: (Int) -> Unit,
-    onPlayClicked: () -> Unit
+    onActorClicked: ((Int) -> Unit)? = null
 ) {
+    val context = LocalContext.current
     Box(
         contentAlignment = Alignment.TopCenter,
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .background(Blackish)
+        modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
         Column {
 
@@ -113,7 +81,9 @@ fun MovieDetails(
                 )
 
                 // Play button
-                TextButton(onClick = onPlayClicked) {
+                TextButton(onClick = {
+                    context.openWebPage(details.homepage)
+                }) {
                     Image(
                         painter = painterResource(id = R.mipmap.play_button),
                         contentDescription = "",
@@ -131,7 +101,7 @@ fun MovieDetails(
                 // Duration
                 Text(
                     text = details.runtime.toDuration(),
-                    color = DarkerWhite,
+                    //color = DarkerWhite,
                     textAlign = TextAlign.End,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -153,25 +123,27 @@ fun MovieDetails(
                 Spacing.Vertical.Medium()
 
                 // Title
-                Text(details.title, style = MaterialTheme.typography.h3, color = Color.White)
+                Text(
+                    details.title,
+                    style = MaterialTheme.typography.h3
+                )
                 Spacing.Vertical.Tiny()
 
                 // Subtitle
                 if (details.tagline.isNotEmpty()) {
                     Text(
                         details.tagline,
-                        color = DarkerWhite,
                         style = MaterialTheme.typography.subtitle2
                     )
                     Spacing.Vertical.Small()
                 }
 
                 // Description
-                Text(details.overview, color = DarkerWhite)
+                Text(details.overview)
                 Spacing.Vertical.Small()
 
                 // Actors
-                ActorsList(actors = actors, onActorClicked = onActorClicked)
+                ActorsList(actors = actors, onActorClicked = onActorClicked ?: {})
             }
         }
     }
@@ -195,29 +167,14 @@ fun ActorsList(actors: List<Actor>, onActorClicked: (Int) -> Unit) {
     }
 }
 
-@Preview(showBackground = true, device = Devices.PIXEL_3A)
+@Preview(showBackground = true, device = Devices.PIXEL_3A, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun MovieDetailsPreview() {
-    val text = stringResource(id = RC.string.placeholder_title)
     AppTheme {
         MovieDetails(
-            MovieDetails(
-                title = text,
-                runtime = 100,
-                genres = listOf(
-                    MovieGenres(name = text),
-                    MovieGenres(name = text)
-                ),
-                voteAverage = 8.5,
-                tagline = text,
-                overview = stringResource(id = RC.string.placeholder_description)
-            ),
-            actors = listOf(
-                Actor(0, "Will Smith", character = "Robert Neville"),
-                Actor(1, "Alice Braga", character = "Anna"),
-                Actor(2, "Charlie Tahan", character = "Ethan"),
-            ),
-            {}, {}
+            FakeMovieDetails.regularDetails,
+            actors = FakeActor.listActors
         )
     }
 }
+

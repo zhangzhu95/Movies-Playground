@@ -2,6 +2,7 @@ package com.zhangzhu95.compose.widgets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -9,7 +10,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import com.zhangzhu95.compose.R
-import com.zhangzhu95.compose.themes.Blackish
 
 @Composable
 fun FadedImage(
@@ -17,6 +17,7 @@ fun FadedImage(
     url: String,
     placeholderRes: Int = R.mipmap.movie_poster
 ) {
+    val backgroundColor = MaterialTheme.colors.background
     RemoteImage(
         url = url,
         placeholderRes = placeholderRes,
@@ -26,7 +27,7 @@ fun FadedImage(
             .drawWithContent {
                 val colors = listOf(
                     Color.Transparent,
-                    Blackish
+                    backgroundColor
                 )
                 drawContent()
                 drawRect(

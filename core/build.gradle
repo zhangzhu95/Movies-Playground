@@ -19,10 +19,10 @@ dependencies {
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
     // Navigation Component
-    def nav_version = "2.5.1"
-    api "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    api "androidx.navigation:navigation-ui-ktx:$nav_version"
-    api "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    def nav_version = "2.5.3"
+    //api "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    //api "androidx.navigation:navigation-ui-ktx:$nav_version"
+    //api "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
     api "androidx.navigation:navigation-compose:$nav_version"
 
     // Timber

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Movies Playground</string>
-    <string name="trending">Trending</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
 </resources>
